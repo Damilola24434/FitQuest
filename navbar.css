@@ -25,6 +25,9 @@
     z-index: 1000;
     width: 100%;  /* Ensures navbar spans full width */
 }
+.nav-link i.fa-plus-circle {
+    margin-right: 8px;
+}
 
 /* Centered navbar content */
 .navbar-container {
@@ -67,6 +70,9 @@
     display: flex;
     gap: 1.5rem;
     align-items: center;
+}
+body {
+    scroll-padding-top: 70px; /* adjust based on your navbar height */
 }
 
 /* Adjust nav link styles for better contrast on purple */

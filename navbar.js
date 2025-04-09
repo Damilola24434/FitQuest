@@ -1,20 +1,19 @@
-// Mobile menu toggle functionality
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const navLinks = document.getElementById('navLinks');
+// Scroll to Top Button
+const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 
-mobileMenuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-    mobileMenuBtn.innerHTML = navLinks.classList.contains('open') 
-        ? '<i class="fas fa-times"></i>' 
-        : '<i class="fas fa-bars"></i>';
+// Show button when user scrolls down 300px
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+        scrollToTopBtn.style.display = 'flex';
+    } else {
+        scrollToTopBtn.style.display = 'none';
+    }
 });
 
-// Close mobile menu when a link is clicked
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            navLinks.classList.remove('open');
-            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-        }
+// Scroll to top when clicked
+scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
     });
 });
