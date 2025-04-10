@@ -1,19 +1,30 @@
-// Scroll to Top Button
-const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 
-// Show button when user scrolls down 300px
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        scrollToTopBtn.style.display = 'flex';
-    } else {
-        scrollToTopBtn.style.display = 'none';
-    }
+// Mobile menu toggle functionality
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileNavLinks = document.getElementById('mobileNavLinks');
+
+mobileMenuBtn.addEventListener('click', () => {
+    mobileNavLinks.classList.toggle('open');
+    mobileMenuBtn.innerHTML = mobileNavLinks.classList.contains('open') 
+        ? '<i class="fas fa-times"></i>' 
+        : '<i class="fas fa-bars"></i>';
 });
 
-// Scroll to top when clicked
-scrollToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+// Close mobile menu when a link is clicked
+document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileNavLinks.classList.remove('open');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     });
 });
+
+// Scroll to workout planner function
+function scrollToWorkoutPlanner() {
+    const plannerSection = document.getElementById('workout-planner');
+    if (plannerSection) {
+        plannerSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Make function available globally
+window.scrollToWorkoutPlanner = scrollToWorkoutPlanner;
