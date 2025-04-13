@@ -1,0 +1,51 @@
+.movieCard {
+    background-color: #ff0000;
+    color: white;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+.movieCard:hover {
+    transform: scale(1.0);
+    box-shadow: 0 7px 14px black;
+
+}
+.movieCard img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.favoriteWatchedIcon{
+    display:flex;
+}
+.favoriteWatchedIcon button{
+  background-color:red;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.movieCard h2 {
+    font-size: 18px;
+    margin: 10px 0 5px;
+}
+
+.movieCard p {
+    margin: 5px 0;
+}
+
+.movieList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    margin-left: 13vw;
+}
+
+.favoriteIcon {
+    cursor: pointer;
+    font-size: 15px;
+    color: #ffd700; /* Gold color for favorite star */
+  }

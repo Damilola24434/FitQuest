@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <!-- Author: Adetola Aladekoba-->
+    <meta charset="UTF-8">
+    <meta name="author" content="Adetola Aladekoba">
+    <meta name="keywords" content="Webpage, Web form">
+    <meta name="description" content="Digital Photo">
+    <title>Digital Photo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 65%;
+            margin: auto;
+        }
+        table {
+            width: 65%;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+        }
+        select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Internet Usage Survey</h2>
+        <p>This survey is being conducted to help identify the Internet usage patterns of our customers.<br>
+        Please take a few moments to complete and submit this short form. Thank you for your cooperation.</p>
+
+        <form name="survey" action="mailto:tolaalade2@gmail.com" method="post">
+            <table cellpadding="15" cellspacing="5">
+                <tr>
+                    <td>What type of Internet connection do you have?<br>(Select One)</td>
+                    <td>
+                        <select size="4">
+                            <option>Dial-up</option>
+                            <option>DSL</option>
+                            <option selected>High-Speed Cable</option>
+                            <option>Other</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>What type of computer do you use most at home?</td>
+                    <td>
+                        <input type="radio" name="computer" value="Desktop"> Desktop
+                        <input type="radio" name="computer" value="Laptop"> Laptop
+                    </td>
+                </tr>
+                <tr>
+                    <td>How would you describe your main reason for using the Internet?</td>
+                    <td>
+                        <input type="radio" name="reason" value="Work"> To do work-related activities<br>
+                        <input type="radio" name="reason" value="School"> To do school-related activities<br>
+                        <input type="radio" name="reason" value="Entertainment"> For entertainment purposes<br>
+                        <input type="radio" name="reason" value="Other"> Other activities
+                    </td>
+                </tr>
+                <tr>
+                    <td> 
+                        <fieldset>
+                            <legend>Types of sites visited</legend>
+                            <p>What types of web sites do you access most often? <br> Check all that apply.</p>
+                            <input type="checkbox" name="sites" value="Self Improvement"> Self Improvement<br>
+                            <input type="checkbox" name="sites" value="Entertainment"> Entertainment<br>
+                            <input type="checkbox" name="sites" value="News"> News and Sports<br>
+                            <input type="checkbox" name="sites" value="Reference"> Reference<br>
+                            <input type="checkbox" name="sites" value="Email"> Email
+                        </fieldset>
+                    </td>
+                    <td>
+                        <fieldset>
+                            <legend>Time spent using internet</legend>
+                            <p>During an average week, how long do you spend online?</p>
+                            <input type="radio" name="time" value="0-3 Hours"> 0-3 Hours<br>
+                            <input type="radio" name="time" value="4-6 Hours"> 4-6 Hours<br>
+                            <input type="radio" name="time" value="7-10 Hours"> 7-10 Hours<br>
+                            <input type="radio" name="time" value="11-14 Hours"> 11-14 Hours<br>
+                            <input type="radio" name="time" value="15+ Hours"> 15+ Hours
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Please comment on your opinions concerning Internet privacy and safety.<br>
+                        <textarea rows="5" cols="100"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>First Name: <input type="text" name="first_name" size="50"></td>
+                    <td>Last Name: <input type="text" name="last_name" size="50"></td>
+                </tr>
+                <tr>
+                    <td>Age: <input type="text" name="age" size="5"></td>
+                    <td>Zip Code: <input type="text" name="zip_code" size="10"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <button type="submit">Click to Submit</button>
+                        <button type="reset">Clear Form</button>
+                    </td>
+                </tr>
+                
+            </table>
+        </form>
+    </div>
+</body>
+</html>

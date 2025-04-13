@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="navbar.html">
+  <title>Fitness Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+    }
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 20%;
+      background: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar h2 {
+      color: gray;
+      font-size: 14px;
+    }
+    .sidebar div {
+      margin: 20px 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .header {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 20px;
+      border-radius: 10px 10px 0 0;
+    }
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .card {
+      flex: 1;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .card img {
+      height: 100px;
+    }
+    .progress {
+      margin-top: 40px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .progress h2 {
+      text-align: center;
+    }
+    .bar-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      height: 220px;
+      margin-top: 20px;
+    }
+    .bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bars {
+      display: flex;
+      gap: 5px;
+      align-items: flex-end;
+    }
+    .bar {
+      width: 15px;
+      border-radius: 4px 4px 0 0;
+    }
+    .workout-bar { background: #9CAF88; }
+    .calories-bar { background: #705D5C; }
+    .steps-bar { background: #FF89AE; }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .legend-color {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+<div id="navbar-container"></div>
+  <div class="container">
+    <div class="sidebar">
+      <h2>m...</h2>
+      <div>☰ Menu</div>
+      <div>📊 Progress</div>
+      <div>🏋️ Workout</div>
+      <div>📖 Meal Plan</div>
+    </div>
+
+    <div class="main">
+      <div class="header">
+        <h1>User, <strong>Welcome Back!</strong></h1>
+      </div>
+
+      <div class="cards">
+        <div class="card" style="background-color: #9CAF88">
+          <img src="workout.png" alt="Workouts">
+          <p>Workouts</p>
+        </div>
+        <div class="card" style="background-color: #705D5C">
+          <img src="calories.png" alt="Calories">
+          <p>Calories</p>
+        </div>
+        <div class="card" style="background-color: #FF89AE">
+          <img src="steps.png" alt="Steps">
+          <p>Steps</p>
+        </div>
+      </div>
+
+      <div class="progress">
+        <h2>Goal Progress</h2>
+        <div class="bar-container" id="barChart"></div>
+
+        <!-- Legend -->
+        <div class="legend">
+          <div><span class="legend-color" style="background:#9CAF88"></span> Workouts</div>
+          <div><span class="legend-color" style="background:#705D5C"></span> Calories</div>
+          <div><span class="legend-color" style="background:#FF89AE"></span> Steps</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+      fetch('navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                // Load navbar.js after the navbar HTML is inserted
+                const script = document.createElement('script');
+                script.src = 'navbar.js';
+                document.body.appendChild(script);
+            });
+
+    const data = [
+      { day: 'Mon', Workouts: 90, Calories: 40, Steps: 30 },
+      { day: 'Tue', Workouts: 40, Calories: 60, Steps: 80 },
+      { day: 'Wed', Workouts: 70, Calories: 90, Steps: 70 },
+      { day: 'Thu', Workouts: 10, Calories: 30, Steps: 10 },
+      { day: 'Fri', Workouts: 50, Calories: 40, Steps: 30 },
+      { day: 'Sat', Workouts: 60, Calories: 30, Steps: 40 },
+      { day: 'Sun', Workouts: 60, Calories: 40, Steps: 30 },
+    ];
+
+    const barChart = document.getElementById('barChart');
+
+    data.forEach(entry => {
+      const group = document.createElement('div');
+      group.className = 'bar-group';
+
+      const bars = document.createElement('div');
+      bars.className = 'bars';
+
+      const workoutBar = document.createElement('div');
+      workoutBar.className = 'bar workout-bar';
+      workoutBar.style.height = `${entry.Workouts * 2}px`;
+
+      const caloriesBar = document.createElement('div');
+      caloriesBar.className = 'bar calories-bar';
+      caloriesBar.style.height = `${entry.Calories * 2}px`;
+
+      const stepsBar = document.createElement('div');
+      stepsBar.className = 'bar steps-bar';
+      stepsBar.style.height = `${entry.Steps * 2}px`;
+
+      bars.appendChild(workoutBar);
+      bars.appendChild(caloriesBar);
+      bars.appendChild(stepsBar);
+
+      const label = document.createElement('span');
+      label.textContent = entry.day;
+      label.style.marginTop = '5px';
+      label.style.fontSize = '12px';
+
+      group.appendChild(bars);
+      group.appendChild(label);
+
+      barChart.appendChild(group);
+    });
+  </script>
+</body>
+</html>
