@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Create Account</title>
+        <link rel="stylesheet" href="auth.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+        <script src="auth.js" defer></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Create your account</h1>
+            <p>Begin your fitness journey</p>
+            <form id="signup-form" novalidate>
+                <label for="signup-email">Email</label>
+                <input type="email" id="signup-email" required aria-describedby="emailHelp" />
+                <small id="emailHelp" class="help-text"></small>
+
+                <label for="signup-username">Username</label>
+                <input type="text" id="signup-username" required />
+
+                <label for="signup-password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="signup-password" required aria-describedby="passwordHelp" />
+                    <button type="button" id="toggle-password" aria-label="Show password">👁️</button>
+                </div>
+
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="LogIn.html">log-in</a></p>
+        </div>
+    </body>
+</html>

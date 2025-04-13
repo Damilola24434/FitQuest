@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+        <link rel="stylesheet" href="auth.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+        <script src="auth.js" defer></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Welcome Back</h1>
+            <p>Please log into your account</p>
+            <form id="login-form">
+                <label for="login-identifier">Email or Username</label>
+                <input type="text" id="login-identifier" required />
+                
+                <label for="login-password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="login-password" required />
+                    <button type="button" id="toggle-password" aria-label="Show password">👁️</button>
+                </div>
+                
+                <button type="submit">Log In</button>
+            </form>
+            <p>Don't have an account? <a href="SignUp.html">sign-up</a></p>
+        </div>
+    </body>
+</html>
