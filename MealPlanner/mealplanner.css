@@ -1,0 +1,162 @@
+/*Mariam Usman
+Styling for mealplanner page
+ */
+
+
+/* Container */
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/*------------------------------------ Everything to do with the nutrients*---------------------------------------/
+
+/* The nutrient icons*/
+.icon-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;     /* The space between the icons*/
+  margin-bottom: 2rem;
+}
+
+.icon-item {
+  text-align: center;  /* The actual nutrient text*/
+}
+
+.icon-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.icon-item p {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;   /* The actual nutrient text*/
+}
+
+/*------------------------------------ Everything to do with the meal plan*---------------------------------------/
+
+/* Meal Plan Title */
+.mealplan-title {
+  text-align: center;
+  margin-bottom: 1.8rem;
+  font-size: 1.8rem;
+}
+
+/* The space each meal occupies*/
+.meal-columns {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+/* The background color on each meal type box */
+.meal-card {
+  background: #eee;
+  border-radius: 20px;
+  padding: 1.5rem;
+  width: 250px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* breakfast color */
+.breakfast {
+  background-color: #a8c8a7; /* Light green */
+  color: black;
+}
+
+/* lunch color */
+.lunch {
+  background-color: #5e504d; /* Brown */
+  color: white;
+}
+
+/* dinner colors */
+.dinner {
+  background-color: #f8a6b0; /* Light pink */
+  color: black;
+}
+
+/* The breakfast,luch... text */
+.meal-card h2 {
+  background: none; 
+  color: white;   
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Additional stuff */
+.meal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* Plus Buttons */
+.plus-button {
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #333;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.plus-button:hover {
+  background-color: #dde; /* changes the color when you hover */
+}
+
+
+/* calculate the amount for each nutrient under each icons */
+.result-text {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+
+/*---------------------------------- Adding the meals ------------------------------------------------------------- */
+.add-form {
+  margin-top: 0.5rem;
+}
+
+.add-form input {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.add-form button {
+  width: 100%;
+  padding: 0.4rem;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-form button:hover {
+  background: #555;
+}
+

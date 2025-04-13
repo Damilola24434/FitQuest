@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitQuest Workout</title>
+
+    <!-- Linking the main CSS file for workout page styling -->
+    <link rel="stylesheet" href="workout.css" />
+
+    <!-- This link is for custom fonts from Google (Inter font family) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- This is to use Font Awesome icons like the arrow and calendar icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- This is where the navbar.html content will be injected using JavaScript -->
+    <div id="navbar-container"></div>
+
+    <div class="container">
+      <!-- This whole section is the main workout area -->
+
+      <!-- This is the search bar users will use to find specific exercises -->
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search exercises..."
+          oninput="handleSearchInput()"
+        />
+        <!-- This button will appear to clear the search input when it's not empty -->
+        <button
+          class="clear-search"
+          onclick="clearSearch()"
+          style="display: none"
+        >
+          ×
+        </button>
+      </div>
+
+      <!-- These buttons allow users to filter exercises based on muscle group -->
+      <div class="category-buttons">
+        <button onclick="fetchExercises('back')">Back</button>
+        <button onclick="fetchExercises('cardio')">Cardio</button>
+        <button onclick="fetchExercises('chest')">Chest</button>
+        <button onclick="fetchExercises('lower arms')">Lower Arms</button>
+        <button onclick="fetchExercises('lower legs')">Lower Legs</button>
+        <button onclick="fetchExercises('neck')">Neck</button>
+        <button onclick="fetchExercises('shoulders')">Shoulders</button>
+        <button onclick="fetchExercises('upper arms')">Upper Arms</button>
+        <button onclick="fetchExercises('upper legs')">Upper Legs</button>
+        <button onclick="fetchExercises('waist')">Waist</button>
+        <button onclick="fetchAllExercises()">All Exercises</button>
+      </div>
+
+      <!-- This section will hold all the exercises fetched from the API  -->
+      <div id="exerciseContainer"></div>
+
+      <!-- Modal that pops up when a user clicks on an exercise for more details -->
+      <div id="exerciseDetailsModal" class="modal">
+        <div class="modal-content">
+          <!-- Close button to hide the modal -->
+          <span class="close-modal" onclick="closeModal()">&times;</span>
+          <h3 id="modalExerciseName">Exercise Name</h3>
+          <div class="modal-exercise-details">
+            <!-- This button currently just closes the modal -->
+            <button onclick="closeModal()" class="add-to-plan-btn">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Linking JavaScript at the bottom for proper loading -->
+    <script src="workout.js"></script>
+
+    <!-- Scroll to top button that shows when user scrolls down -->
+    <button id="scrollToTopBtn" class="scroll-to-top" title="Go to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </body>
+</html>
