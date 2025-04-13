@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Mariam Usman">
+  <meta name="keywords" content="planner">
+  <meta name="description" content="This is the meal palnner page for semester project">
+  <title>Meal Planner</title>
+  <link rel="stylesheet" href="mealplanner.css">
+</head>
+
+<body>
+
+  <!-- The icons at the top, protein, calorie,water -->
+  <main class="container">
+    
+    <section class="icon-row">
+
+      <!--Protein class-->
+      <div class="icon-item" id="proteinIcon">
+        <img src="icons/protein.png" alt="Protein Intake">
+        <p>Protein Intake</p>
+        <p id="proteinResult" class="result-text"></p> <!-- Protein calculation result-->
+      </div>
+      
+      <!--Calorie gained class-->
+      <div class="icon-item" id="caloricIcon">
+        <img src="icons/calorie.png" alt="Caloric Intake">
+        <p>Caloric Intake</p>
+        <p id="caloricResult" class="result-text"></p> <!--Calorie calculation result-->
+      </div>
+      
+      <!-- Clorie burned class -->
+      <div class="icon-item" id="burnIcon">
+        <img src="icons/calorie_burn.png" alt="Caloric Burn">
+        <p>Caloric Burn</p> 
+      </div>
+
+      <!-- water intake class -->
+      <div class="icon-item" id="waterIcon">
+        <img src="icons/water.png" alt="Water Intake">
+        <p>Water Intake</p>
+        <p id="waterResult" class="result-text"></p> <!--water calculation result-->
+      </div>
+    </section>
+
+    <!-- Date Picker -->
+    <section class="date-picker-section" 
+             style="text-align: center; margin: 2rem 0;">
+      <label for="selectedDate"
+             style="font-weight: bold; font-size: 1.1rem;">Choose Date:</label><br><br>
+      <input type="date" 
+             id="selectedDate" 
+             style="padding: 0.5rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc;">
+    </section>
+
+    <!-- Meal Plan Title/section -->
+    <h1 class="mealplan-title">Meal Plan</h1>
+
+    <section class="meal-columns">
+
+      <div class="meal-card breakfast">
+        <h2>Breakfast</h2>
+        <div class="meal-list" id="breakfastList"></div>
+      </div>
+
+      <div class="meal-card lunch">
+        <h2>Lunch</h2>
+        <div class="meal-list" id="lunchList"></div>
+      </div>
+
+      <div class="meal-card dinner">
+        <h2>Dinner</h2>
+        <div class="meal-list" id="dinnerList"></div>
+      </div>
+      
+    </section>
+  </main>
+
+  <!-- Access to the js script -->
+  <script src="mealplanner.js"></script>
+</body>
+</html>
