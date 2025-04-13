@@ -1,0 +1,128 @@
+:root {
+    --primary-purple: #5A4FCF;
+    --dark-purple: #3A3288;
+    --light-purple: #9188F0;
+    --bg-white: #ffffff;
+    --gray-text: #555;
+    --surface: #ffffff;
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --radius-md: 12px;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    color: var(--text-primary);
+  }
+  
+  .container {
+    margin-top: 80px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--dark-purple);
+  }
+  
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: var(--text-secondary);
+  }
+  
+  form {
+    display: inline-block;
+    text-align: left;
+    background-color: var(--surface);
+    padding: 30px;
+    border-radius: var(--radius-md);
+    border: 1px solid #ddd;
+    box-shadow: var(--shadow-md);
+  }
+  
+  form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--text-primary);
+  }
+  
+  form input {
+    width: 300px;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  form input:focus {
+    border-color: var(--primary-purple);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(90, 79, 207, 0.2); /* subtle glow */
+  }
+  
+  
+  button[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: var(--primary-purple);
+    color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: var(--dark-purple);
+  }
+  
+  a {
+    color: var(--primary-purple);
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .password-container {
+    position: relative;
+    width: 300px;
+  }
+  
+  #toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.2em;
+    color: var(--gray-text);
+  }
+  
+  @media (max-width: 500px) {
+    form {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    form input,
+    .password-container {
+      width: 100%;
+    }
+  }
