@@ -86,13 +86,53 @@ function updateProgress() {
 // Check if all goals are completed
 function checkCompletion() {
   const resultMessage = document.getElementById('resultMessage');
-  
-  if (todayProgress.workouts >= dailyGoals.workouts && 
-      todayProgress.calories >= dailyGoals.calories) {
-    resultMessage.textContent = "🎉 All goals completed! Great job!";
+  let message = "";
+  const exceededWorkouts = todayProgress.workouts - dailyGoals.workouts;
+  const exceededCalories = todayProgress.calories - dailyGoals.calories;
+
+  if (todayProgress.workouts >= dailyGoals.workouts && todayProgress.calories >= dailyGoals.calories) {
+    message = "🎉 All goals completed!";
+    
+    if (exceededWorkouts > 0 || exceededCalories > 0) {
+      message += " You exceeded your goals by:";
+      if (exceededWorkouts > 0) {
+        message += ` ${exceededWorkouts} workout${exceededWorkouts > 1 ? 's' : ''}`;
+      }
+      if (exceededCalories > 0) {
+        message += `${exceededWorkouts > 0 ? ' and' : ''} ${exceededCalories} calories`;
+      }
+      message += "!";
+    } else {
+      message += " Perfect achievement!";
+    }
+
     resultMessage.className = "result-message success";
+
+    // Visual indication of exceeded goals
+    if (exceededWorkouts > 0) {
+      document.querySelector('.workout-fill').style.backgroundColor = '#7cb342'; // Light green
+    }
+    if (exceededCalories > 0) {
+      document.querySelector('.calorie-fill').style.backgroundColor = '#d84315'; // Deep orange
+    }
+
   } else {
-    resultMessage.textContent = "";
+    // Give helpful insight if goals are not yet met
+    const workoutsLeft = dailyGoals.workouts - todayProgress.workouts;
+    const caloriesLeft = dailyGoals.calories - todayProgress.calories;
+
+    if (workoutsLeft > 0 && caloriesLeft > 0) {
+      message = `You're doing great! 💪 You need ${workoutsLeft} more workout${workoutsLeft > 1 ? 's' : ''} and ${caloriesLeft} more calories burned to hit today's goals. Keep going! 🔥`;
+    } else if (workoutsLeft > 0) {
+      message = `You're almost there! Just ${workoutsLeft} more workout${workoutsLeft > 1 ? 's' : ''} to go! 🏋️‍♀️`;
+    } else if (caloriesLeft > 0) {
+      message = `🔥 Almost there! Burn ${caloriesLeft} more calories to reach your target.`;
+    }
+
     resultMessage.className = "result-message";
+    document.querySelector('.workout-fill').style.backgroundColor = '#9CAF88';
+    document.querySelector('.calorie-fill').style.backgroundColor = '#705D5C';
   }
+
+  resultMessage.textContent = message;
 }
