@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fitness Dashboard</title>
+  
   <link rel="stylesheet" href="Dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -21,10 +22,16 @@
           <a  href="Workout.html">
             <img src="icons8-workout.gif" alt="Workouts" class="dashboard-image" />
           </a>
+          
           <p>Workouts</p>
         </div>
         <div class="card" style="background-color: #705D5C">
-          <img src="calories.png" alt="Calories Burnt">
+          <img id="caloriesImage" src="calories.png" alt="Calories Burnt">
+          <!-- Popup to show calories -->
+          <div id="caloriesPopup">
+            <p id="caloriesText"></p>
+          </div>
+
           <p>Calories Burnt</p>
         </div>
       </div>
@@ -92,6 +99,6 @@
   </div>
 </div> 
 
-<script src="dashboard.js"></script>
+<script src="Dashboard.js"></script>
 </body>
 </html>
