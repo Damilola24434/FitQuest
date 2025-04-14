@@ -1,16 +1,3 @@
-// First things first - let's load up that navbar from our components
-fetch("../Navbar/navbar.html")
-  .then((response) => response.text())
-  .then((html) => {
-    // Pop the navbar HTML into our container
-    document.getElementById("navbar-container").innerHTML = html;
-
-    // Now that the HTML is loaded, let's grab the navbar JS too
-    const script = document.createElement("script");
-    script.src = "../Navbar/navbar.js";
-    document.body.appendChild(script);
-  });
-  
 // Track progress
 let dailyGoals = {
   workouts: 0,
@@ -27,7 +14,7 @@ const setGoalsBtn = document.getElementById('setGoalsBtn');
 const addWorkoutBtn = document.getElementById('addWorkoutBtn');
 const addCaloriesBtn = document.getElementById('addCaloriesBtn');
 const progressDisplay = document.querySelector('.progress-display');
-
+const caloriesCard = document.querySelector('.card:nth-child(2)');
 // Set daily goals
 setGoalsBtn.addEventListener('click', function() {
   const workoutGoal = parseInt(document.getElementById('workoutGoal').value);
@@ -64,26 +51,29 @@ addCaloriesBtn.addEventListener('click', function() {
   const calories = parseInt(document.getElementById('addCalories').value);
   if (calories && calories > 0) {
     todayProgress.calories += calories;
+    localStorage.setItem('caloriesToday', todayProgress.calories);
     document.getElementById('addCalories').value = '';
     updateProgress();
     checkCompletion();
   }
 });
 
-// Update progress display
 function updateProgress() {
   // Workouts
   const workoutPercent = Math.min(100, (todayProgress.workouts / dailyGoals.workouts) * 100);
   document.getElementById('workoutProgress').style.width = `${workoutPercent}%`;
-  document.getElementById('workoutsCount').textContent = `${todayProgress.workouts}/${dailyGoals.workouts}`;
-  
+  document.getElementById('workoutsCount').textContent = 
+    `${todayProgress.workouts}/${dailyGoals.workouts}` +
+    (todayProgress.workouts > dailyGoals.workouts ? ` (+${todayProgress.workouts - dailyGoals.workouts})` : '');
+
   // Calories
   const caloriePercent = Math.min(100, (todayProgress.calories / dailyGoals.calories) * 100);
   document.getElementById('calorieProgress').style.width = `${caloriePercent}%`;
-  document.getElementById('caloriesCount').textContent = `${todayProgress.calories}/${dailyGoals.calories}`;
+  document.getElementById('caloriesCount').textContent = 
+    `${todayProgress.calories}/${dailyGoals.calories}` +
+    (todayProgress.calories > dailyGoals.calories ? ` (+${todayProgress.calories - dailyGoals.calories})` : '');
 }
 
-// Check if all goals are completed
 function checkCompletion() {
   const resultMessage = document.getElementById('resultMessage');
   let message = "";
@@ -136,3 +126,15 @@ function checkCompletion() {
 
   resultMessage.textContent = message;
 }
+
+document.getElementById('caloriesImage').addEventListener('click', function() {
+  const popup = document.getElementById('caloriesPopup');
+  const caloriesText = document.getElementById('caloriesText');
+  caloriesText.textContent = `You've burned ${todayProgress.calories} calories today! 🔥`;
+  popup.style.display = 'block';
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    popup.style.display = 'none';
+  }, 3000);
+});
