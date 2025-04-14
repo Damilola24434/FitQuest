@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FitQuest Navigation</title>
+    <link rel="stylesheet" href="../Navbar/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Wrapper container for the navbar -->
+    <div class="navbar-wrapper">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <a href="#" class="navbar-brand">
+            <div class="logo-icon">FQ</div>
+            <div class="logo-text">FitQuest</div>
+          </a>
+
+          <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <!-- Desktop Navigation -->
+          <div class="nav-links desktop-nav" id="desktopNavLinks">
+            <a href="#" class="nav-link"
+              ><i class="fas fa-chart-line"></i> Dashboard</a
+            >
+            <a href="../Workout/workout.html" class="nav-link active"
+              ><i class="fas fa-dumbbell"></i> Workout</a
+            >
+
+            <a href="../MealPlanner/mealplanner.html" class="nav-link">
+              <i class="fas fa-calendar-alt"></i> Meal Planner
+            </a>
+          </div>
+
+          <!-- Mobile Navigation (different links) -->
+          <div class="nav-links mobile-nav" id="mobileNavLinks">
+            <a href="#" class="nav-link"
+              ><i class="fas fa-home"></i> Dashboard</a
+            >
+            <a href="../Workout/workout.html" class="nav-link"
+              ><i class="fas fa-dumbbell"></i> Workout</a
+            >
+
+            <a href="../MealPlanner/mealplanner.html" class="nav-link"
+              ><i class="fas fa-cog"></i> Meal Planner</a
+            >
+          </div>
+        </div>
+      </nav>
+    </div>
+  </body>
+</html>
