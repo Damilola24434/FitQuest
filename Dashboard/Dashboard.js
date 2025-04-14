@@ -1,3 +1,16 @@
+// First things first - let's load up that navbar from our components
+fetch("../Navbar/navbar.html")
+  .then((response) => response.text())
+  .then((html) => {
+    // Pop the navbar HTML into our container
+    document.getElementById("navbar-container").innerHTML = html;
+
+    // Now that the HTML is loaded, let's grab the navbar JS too
+    const script = document.createElement("script");
+    script.src = "../Navbar/navbar.js";
+    document.body.appendChild(script);
+  });
+  
 // Track progress
 let dailyGoals = {
   workouts: 0,

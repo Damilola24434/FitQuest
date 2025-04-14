@@ -1,389 +1,461 @@
-// First things first - let's load up that navbar from our components
-fetch("../Navbar/navbar.html")
-  .then((response) => response.text())
-  .then((html) => {
-    // Pop the navbar HTML into our container
-    document.getElementById("navbar-container").innerHTML = html;
+// Configuration
+const CONFIG = {
+  API_KEY: "cc571f4ee2msh483e94de6e08a2bp1f7335jsnfc6dcf4027be",
+  API_HOST: "exercisedb.p.rapidapi.com",
+  RATE_LIMIT_MS: 1000, // 1 second between requests
+  MAX_RETRIES: 3,
+  MAX_CONCURRENT_REQUESTS: 3,
+  DEFAULT_CATEGORY: "back",
+  EXCLUDED_EXERCISES: ["barbell pullover to press"],
+};
 
-    // Now that the HTML is loaded, let's grab the navbar JS too
+// State management
+const state = {
+  exercisesCache: {},
+  currentCategory: CONFIG.DEFAULT_CATEGORY,
+  searchTimeout: null,
+  lastRequestTime: 0,
+  pendingRequests: 0,
+};
+
+// DOM Elements
+const dom = {
+  container: null,
+  searchInput: null,
+  clearBtn: null,
+  navbarContainer: null,
+};
+
+// Initialize the application
+function init() {
+  cacheDOM();
+  setupEventListeners();
+  loadNavbar()
+    .then(() => fetchExercises(state.currentCategory))
+    .catch((error) => {
+      console.error("Initialization error:", error);
+      showError(dom.container, "Failed to initialize application");
+    });
+}
+
+// Cache DOM elements
+function cacheDOM() {
+  dom.container = document.getElementById("exerciseContainer");
+  dom.searchInput = document.getElementById("searchInput");
+  dom.clearBtn = document.querySelector(".clear-search");
+  dom.navbarContainer = document.getElementById("navbar-container");
+}
+
+// Setup event listeners
+function setupEventListeners() {
+  if (dom.searchInput) {
+    dom.searchInput.addEventListener("input", handleSearchInput);
+  }
+  if (dom.clearBtn) {
+    dom.clearBtn.addEventListener("click", clearSearch);
+  }
+
+  // Scroll to top button
+  const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+  if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener("click", scrollToTop);
+    window.addEventListener("scroll", () => {
+      scrollToTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
+    });
+  }
+}
+
+// Load navbar
+async function loadNavbar() {
+  try {
+    const response = await fetch("../Navbar/navbar.html");
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const html = await response.text();
+    dom.navbarContainer.innerHTML = html;
+
+    // Load navbar scripts
     const script = document.createElement("script");
     script.src = "../Navbar/navbar.js";
     document.body.appendChild(script);
-  });
-
-// These are all the exercise categories we'll be working with
-const allCategories = [
-  "back",
-  "cardio",
-  "chest",
-  "lower arms",
-  "lower legs",
-  "neck",
-  "shoulders",
-  "upper arms",
-  "upper legs",
-  "waist",
-];
-
-// Some exercises just don't play nice - we'll exclude these
-const excludedExercises = ["barbell pullover to press"];
-
-// Cache for all exercises so we don't keep hitting the API
-let allExercisesCache = {};
-let currentCategory = "back"; // Start with back exercises by default
-let searchTimeout = null; // For debouncing our search
-let lastClickedCard = null; // Track which card was last clicked
-
-// Handle when someone types in the search box
-function handleSearchInput() {
-  const searchInput = document.getElementById("searchInput");
-  const clearBtn = document.querySelector(".clear-search");
-
-  // Show/hide the clear button based on whether there's text
-  clearBtn.style.display = searchInput.value ? "block" : "none";
-
-  // Wait a bit before searching to avoid too many requests
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    searchExercises();
-  }, 300); // 300ms delay
-}
-
-// Clear out the search and show the current category again
-function clearSearch() {
-  const searchInput = document.getElementById("searchInput");
-  searchInput.value = "";
-  document.querySelector(".clear-search").style.display = "none";
-  fetchExercises(currentCategory); // Go back to showing the current category
-}
-
-// Actually perform the exercise search
-async function searchExercises() {
-  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-  const container = document.getElementById("exerciseContainer");
-
-  // Don't search for very short terms
-  if (searchTerm.length < 2) {
-    if (searchTerm.length === 0) {
-      fetchExercises(currentCategory);
-    }
-    return;
-  }
-
-  try {
-    container.innerHTML = '<div class="loading">Searching exercises...</div>';
-
-    // If we haven't loaded exercises yet, load them all
-    if (Object.keys(allExercisesCache).length === 0) {
-      const promises = allCategories.map((category) =>
-        fetch(
-          `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${category}?limit=50`,
-          {
-            method: "GET",
-            headers: {
-              "X-RapidAPI-Key":
-                " ba6fe04c2dmsh14c528abbc864c4p113585jsnb66b4e94a12f",
-              "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
-            },
-          }
-        ).then((response) => {
-          if (!response.ok) throw new Error(`Failed to fetch ${category}`);
-          return response.json().then((exercises) => ({
-            category,
-            exercises: exercises.filter(
-              (exercise) =>
-                !excludedExercises.some((excluded) =>
-                  exercise.name.toLowerCase().includes(excluded.toLowerCase())
-                )
-            ),
-          }));
-        })
-      );
-
-      const results = await Promise.all(promises);
-      results.forEach((group) => {
-        allExercisesCache[group.category] = group.exercises;
-      });
-    }
-
-    // Search through all exercises for matches
-    const searchResults = [];
-    Object.entries(allExercisesCache).forEach(([category, exercises]) => {
-      exercises.forEach((exercise) => {
-        if (exercise.name.toLowerCase().includes(searchTerm)) {
-          searchResults.push({
-            ...exercise,
-            originalCategory: category,
-          });
-        }
-      });
-    });
-
-    // Show results if we found any
-    if (searchResults.length > 0) {
-      container.innerHTML = `<h2 class="category-title">Search Results (${searchResults.length})</h2>`;
-      displayExercises(searchResults, "search");
-    } else {
-      container.innerHTML = `<div class="error">
-        No exercises found matching "${searchTerm}"
-      </div>`;
-    }
   } catch (error) {
-    container.innerHTML = `<div class="error">
-      Error during search: ${error.message}
-    </div>`;
+    console.error("Failed to load navbar:", error);
+    dom.navbarContainer.innerHTML = `<div class="error">Navigation failed to load</div>`;
+    throw error;
   }
 }
 
-// Fetch exercises for a specific body part
-async function fetchExercises(bodyPart) {
-  currentCategory = bodyPart;
-  const container = document.getElementById("exerciseContainer");
-  container.innerHTML =
-    '<div class="loading">Loading ' + bodyPart + " exercises...</div>";
+// Rate-limited fetch
+async function rateLimitedFetch(url, options) {
+  const now = Date.now();
+  const elapsed = now - state.lastRequestTime;
+  const delay = Math.max(0, CONFIG.RATE_LIMIT_MS - elapsed);
+
+  if (delay > 0 && state.pendingRequests >= CONFIG.MAX_CONCURRENT_REQUESTS) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+
+  state.pendingRequests++;
+  state.lastRequestTime = now;
 
   try {
-    const response = await fetch(
-      `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=50`,
+    const response = await fetch(url, options);
+
+    if (response.headers.has("X-RateLimit-Remaining")) {
+      const remaining = parseInt(response.headers.get("X-RateLimit-Remaining"));
+      if (remaining < 5) console.warn(`Low rate limit remaining: ${remaining}`);
+    }
+
+    return response;
+  } finally {
+    state.pendingRequests--;
+  }
+}
+
+// Fetch with retry logic
+async function fetchWithRetry(url, options, retries = CONFIG.MAX_RETRIES) {
+  try {
+    return await rateLimitedFetch(url, options);
+  } catch (error) {
+    if (retries <= 0) throw error;
+
+    const delay = Math.pow(2, CONFIG.MAX_RETRIES - retries) * 1000;
+    console.log(`Retrying in ${delay}ms... (${retries} attempts left)`);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+
+    return fetchWithRetry(url, options, retries - 1);
+  }
+}
+
+// Main exercise fetching function
+async function fetchExercises(bodyPart) {
+  state.currentCategory = bodyPart;
+  showLoading(dom.container, `Loading ${bodyPart} exercises...`);
+
+  try {
+    const response = await fetchWithRetry(
+      `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=10`,
       {
         method: "GET",
         headers: {
-          "X-RapidAPI-Key":
-            " ba6fe04c2dmsh14c528abbc864c4p113585jsnb66b4e94a12f",
-          "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
+          "X-RapidAPI-Key": CONFIG.API_KEY,
+          "X-RapidAPI-Host": CONFIG.API_HOST,
         },
       }
     );
 
-    if (!response.ok)
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        `Failed to fetch ${bodyPart} exercises: ${response.status}`
+        errorData.message || `HTTP error! status: ${response.status}`
       );
+    }
 
-    let exercises = await response.json();
+    const exercises = await response.json();
+    const filteredExercises = filterExercises(exercises);
 
-    // Filter out any excluded exercises
-    exercises = exercises.filter(
-      (exercise) =>
-        !excludedExercises.some((excluded) =>
-          exercise.name.toLowerCase().includes(excluded.toLowerCase())
-        )
-    );
-
-    // Display what we found
-    displayExercises(exercises, bodyPart);
+    displayExercises(filteredExercises, bodyPart);
+    cacheExercises(bodyPart, filteredExercises);
   } catch (error) {
-    // Show a helpful error message with solutions
-    container.innerHTML = `<div class="error">
-      Error loading ${bodyPart} exercises: ${error.message}<br><br>
-      <strong>Possible solutions:</strong>
-      <ol>
-        <li>Check your <a href="https://rapidapi.com/developer/dashboard" target="_blank">RapidAPI subscription</a></li>
-        <li>Refresh the page and try again</li>
-        <li>Try a different category</li>
-      </ol>
-    </div>`;
+    console.error(`Failed to load ${bodyPart}:`, error);
+
+    if (state.exercisesCache[bodyPart]) {
+      showWarning(
+        dom.container,
+        `Using cached data (${bodyPart})`,
+        error.message
+      );
+      displayExercises(state.exercisesCache[bodyPart], bodyPart);
+    } else {
+      showError(
+        dom.container,
+        `Error loading ${bodyPart} exercises: ${error.message}`,
+        true
+      );
+    }
   }
 }
 
-// Fetch all exercises at once - used for search and daily workout
-async function fetchAllExercises() {
-  const container = document.getElementById("exerciseContainer");
-  container.innerHTML =
-    '<div class="loading">Loading all exercises... This may take a moment</div>';
-
-  try {
-    let allExercises = [];
-
-    // Fetch each category in parallel
-    const promises = allCategories.map((category) =>
-      fetch(
-        `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${category}?limit=30`,
-        {
-          method: "GET",
-          headers: {
-            "X-RapidAPI-Key":
-              " ba6fe04c2dmsh14c528abbc864c4p113585jsnb66b4e94a12f",
-            "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
-          },
-        }
-      ).then((response) => {
-        if (!response.ok) throw new Error(`Failed to fetch ${category}`);
-        return response.json().then((exercises) => ({
-          category,
-          exercises: exercises.filter(
-            (exercise) =>
-              !excludedExercises.some((excluded) =>
-                exercise.name.toLowerCase().includes(excluded.toLowerCase())
-              )
-          ),
-        }));
-      })
-    );
-
-    const results = await Promise.all(promises);
-    allExercises = results.filter((result) => result.exercises.length > 0);
-
-    container.innerHTML = "";
-    // Display each category's exercises
-    allExercises.forEach((group) => {
-      displayExercises(group.exercises, group.category);
-    });
-
-    // Cache all the exercises for later
-    allExercises.forEach((group) => {
-      allExercisesCache[group.category] = group.exercises;
-    });
-  } catch (error) {
-    container.innerHTML = `<div class="error">
-      Error loading all exercises: ${error.message}<br><br>
-      Try selecting individual categories instead
-    </div>`;
-  }
+// Filter excluded exercises
+function filterExercises(exercises) {
+  return exercises.filter(
+    (exercise) =>
+      !CONFIG.EXCLUDED_EXERCISES.some((excluded) =>
+        exercise.name.toLowerCase().includes(excluded.toLowerCase())
+      )
+  );
 }
 
-// Display exercises in a nice grid layout
+// Cache exercises
+function cacheExercises(category, exercises) {
+  state.exercisesCache[category] = exercises;
+}
+
+// Display exercises
 function displayExercises(exercises, category) {
-  const container = document.getElementById("exerciseContainer");
-  const searchInput = document.getElementById("searchInput");
+  clearContainer(category);
 
-  // If we're not doing a search and there's a search term, bail out
-  if (category !== "search" && searchInput.value.length >= 2) {
+  if (exercises.length === 0) {
+    showError(dom.container, "No exercises found");
     return;
   }
 
-  // Clear out any existing category titles if we're not searching
-  if (category !== "search" && container.querySelector(".category-title")) {
-    container.innerHTML = "";
-  }
+  addCategoryTitle(category, exercises.length);
 
-  // Add a title for this category
-  if (category !== "search") {
-    const categoryTitle = document.createElement("h2");
-    categoryTitle.className = "category-title";
-    categoryTitle.textContent = `${
-      category.charAt(0).toUpperCase() + category.slice(1)
-    } Exercises (${exercises.length})`;
-    container.appendChild(categoryTitle);
-  }
-
-  // Create the grid container
   const grid = document.createElement("div");
   grid.className = "exercise-grid";
 
-  // Add each exercise as a card
   exercises.forEach((exercise) => {
-    const card = document.createElement("div");
-    card.className = "exercise-card";
-
-    // Format instructions if available
-    const formattedInstructions =
-      exercise.instructions && exercise.instructions.length > 0
-        ? exercise.instructions
-            .map((step, index) => `<li>${step}</li>`)
-            .join("")
-        : "<li>No instructions available</li>";
-
-    // Build the card HTML
-    card.innerHTML = `
-      <div class="gif-container">
-        <img src="${exercise.gifUrl}" alt="${exercise.name}" loading="lazy">
-        <div class="gif-overlay"></div>
-        <div class="watermark-cover">${exercise.name}</div>
-      </div>
-      <div class="exercise-content">
-        <div class="exercise-details">
-          <div class="exercise-details-content">
-            <div class="exercise-info"><strong>Equipment:</strong> ${
-              exercise.equipment || "None"
-            }</div>
-            <div class="exercise-info"><strong>Target:</strong> ${
-              exercise.target
-            }</div>
-            ${
-              exercise.secondaryMuscles && exercise.secondaryMuscles.length > 0
-                ? `<div class="exercise-info"><strong>Secondary Muscles:</strong> ${exercise.secondaryMuscles.join(
-                    ", "
-                  )}</div>`
-                : ""
-            }
-            ${
-              category === "search"
-                ? `<div class="exercise-info"><strong>Category:</strong> ${
-                    exercise.originalCategory || category
-                  }</div>`
-                : ""
-            }
-            <div class="exercise-info"><strong>Instructions:</strong></div>
-            <ol class="instructions-list">
-                ${formattedInstructions}
-            </ol>
-          </div>
-        </div>
-      </div>
-    `;
-
-    const watermarkCover = card.querySelector(".watermark-cover");
-    const exerciseDetails = card.querySelector(".exercise-details");
-
-    // Click handler for the card
-    card.addEventListener("click", function (e) {
-      // Don't interfere with watermark clicks
-      if (e.target === watermarkCover) return;
-
-      // Close any other open details
-      document
-        .querySelectorAll(".exercise-details.expanded")
-        .forEach((details) => {
-          if (details !== exerciseDetails) {
-            details.classList.remove("expanded");
-          }
-        });
-
-      // Toggle this one
-      exerciseDetails.classList.toggle("expanded");
-    });
-
-    // Special click handler for the watermark
-    watermarkCover.addEventListener("click", function (e) {
-      e.stopPropagation(); // Don't let the card click handler fire
-
-      // Close others
-      document
-        .querySelectorAll(".exercise-details.expanded")
-        .forEach((details) => {
-          if (details !== exerciseDetails) {
-            details.classList.remove("expanded");
-          }
-        });
-
-      // Toggle this one
-      exerciseDetails.classList.toggle("expanded");
-    });
-
-    grid.appendChild(card);
+    grid.appendChild(createExerciseCard(exercise, category));
   });
 
-  container.appendChild(grid);
+  dom.container.appendChild(grid);
 }
 
-// When the page loads, do these things
-window.onload = function () {
-  // Start with back exercises
-  fetchExercises("back");
+// Create exercise card
+function createExerciseCard(exercise, category) {
+  const card = document.createElement("div");
+  card.className = "exercise-card";
 
-  // Load today's special workout
-  loadDailyExercise();
+  card.innerHTML = `
+    <div class="gif-container">
+      <img src="${exercise.gifUrl}" alt="${exercise.name}" loading="lazy">
+      <div class="watermark-cover">${exercise.name}</div>
+    </div>
+    <div class="exercise-content">
+      <div class="exercise-details">
+        <div class="exercise-details-content">
+          <div class="exercise-info"><strong>Equipment:</strong> ${
+            exercise.equipment || "None"
+          }</div>
+          <div class="exercise-info"><strong>Target:</strong> ${
+            exercise.target
+          }</div>
+          ${
+            exercise.secondaryMuscles?.length > 0
+              ? `<div class="exercise-info"><strong>Secondary Muscles:</strong> ${exercise.secondaryMuscles.join(
+                  ", "
+                )}</div>`
+              : ""
+          }
+          ${
+            category === "search"
+              ? `<div class="exercise-info"><strong>Category:</strong> ${
+                  exercise.originalCategory || category
+                }</div>`
+              : ""
+          }
+          <div class="exercise-info"><strong>Instructions:</strong></div>
+          <ol class="instructions-list">
+            ${(exercise.instructions || ["No instructions available"])
+              .map((step) => `<li>${step}</li>`)
+              .join("")}
+          </ol>
+        </div>
+      </div>
+    </div>
+  `;
 
-  // Set up a timer to refresh the daily workout at midnight
-  const now = new Date();
-  const midnight = new Date();
-  midnight.setHours(24, 0, 0, 0);
-  const msUntilMidnight = midnight - now;
+  setupCardInteractions(card);
+  return card;
+}
 
-  setTimeout(() => {
-    loadDailyExercise();
-    // Then keep refreshing every 24 hours
-    setInterval(loadDailyExercise, 86400000);
-  }, msUntilMidnight);
-};
+// Handle search input
+function handleSearchInput() {
+  const searchTerm = dom.searchInput.value.trim().toLowerCase();
+  dom.clearBtn.style.display = searchTerm ? "block" : "none";
+
+  clearTimeout(state.searchTimeout);
+  state.searchTimeout = setTimeout(() => {
+    if (searchTerm.length >= 2) {
+      searchExercises(searchTerm);
+    } else if (searchTerm.length === 0) {
+      fetchExercises(state.currentCategory);
+    }
+  }, 300);
+}
+
+// Perform search
+async function searchExercises(searchTerm) {
+  showLoading(dom.container, "Searching exercises...");
+
+  try {
+    // First try cached data
+    const cachedResults = searchInCache(searchTerm);
+    if (cachedResults.length > 0) {
+      showSearchResults(cachedResults);
+      return;
+    }
+
+    // If no cached results, fetch all
+    await fetchAllExercises();
+    const freshResults = searchInCache(searchTerm);
+
+    if (freshResults.length > 0) {
+      showSearchResults(freshResults);
+    } else {
+      showError(dom.container, `No exercises found matching "${searchTerm}"`);
+    }
+  } catch (error) {
+    showError(dom.container, `Search error: ${error.message}`);
+  }
+}
+
+// Search in cache
+function searchInCache(searchTerm) {
+  const results = [];
+  Object.entries(state.exercisesCache).forEach(([category, exercises]) => {
+    exercises.forEach((exercise) => {
+      if (exercise.name.toLowerCase().includes(searchTerm)) {
+        results.push({ ...exercise, originalCategory: category });
+      }
+    });
+  });
+  return results;
+}
+
+// Show search results
+function showSearchResults(results) {
+  dom.container.innerHTML = `<h2 class="category-title">Search Results (${results.length})</h2>`;
+  const grid = document.createElement("div");
+  grid.className = "exercise-grid";
+
+  results.forEach((exercise) => {
+    grid.appendChild(createExerciseCard(exercise, "search"));
+  });
+
+  dom.container.appendChild(grid);
+}
+
+// Clear search
+function clearSearch() {
+  dom.searchInput.value = "";
+  dom.clearBtn.style.display = "none";
+  fetchExercises(state.currentCategory);
+}
+
+// Fetch all exercises
+async function fetchAllExercises() {
+  if (Object.keys(state.exercisesCache).length === allCategories.length) return;
+
+  showLoading(dom.container, "Loading all exercises...");
+
+  try {
+    const promises = allCategories.map((category) =>
+      fetchExercisesByCategory(category)
+    );
+
+    await Promise.all(promises);
+  } catch (error) {
+    console.error("Failed to load all exercises:", error);
+    throw error;
+  }
+}
+
+// Fetch exercises by category
+async function fetchExercisesByCategory(category) {
+  if (state.exercisesCache[category]) return;
+
+  try {
+    const response = await fetchWithRetry(
+      `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${category}?limit=10`,
+      {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key": CONFIG.API_KEY,
+          "X-RapidAPI-Host": CONFIG.API_HOST,
+        },
+      }
+    );
+
+    if (!response.ok) throw new Error(`Failed to fetch ${category}`);
+
+    const exercises = await response.json();
+    state.exercisesCache[category] = filterExercises(exercises);
+  } catch (error) {
+    console.error(`Failed to load ${category}:`, error);
+    throw error;
+  }
+}
+
+// Helper functions
+function clearContainer(exceptForSearch = false) {
+  if (!exceptForSearch || !dom.searchInput.value) {
+    dom.container.innerHTML = "";
+  }
+}
+
+function addCategoryTitle(category, count) {
+  const title = document.createElement("h2");
+  title.className = "category-title";
+  title.textContent = `${
+    category.charAt(0).toUpperCase() + category.slice(1)
+  } Exercises (${count})`;
+  dom.container.appendChild(title);
+}
+
+function setupCardInteractions(card) {
+  const details = card.querySelector(".exercise-details");
+  const watermark = card.querySelector(".watermark-cover");
+
+  card.addEventListener("click", (e) => {
+    if (e.target !== watermark) toggleDetails(details);
+  });
+
+  watermark.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleDetails(details);
+  });
+}
+
+function toggleDetails(detailsElement) {
+  document.querySelectorAll(".exercise-details.expanded").forEach((d) => {
+    if (d !== detailsElement) d.classList.remove("expanded");
+  });
+  detailsElement.classList.toggle("expanded");
+}
+
+function showLoading(container, message) {
+  container.innerHTML = `<div class="loading">${message}</div>`;
+}
+
+function showError(container, message, showSolutions = false) {
+  container.innerHTML = `
+    <div class="error">
+      ${message}
+      ${
+        showSolutions
+          ? `
+        <div class="error-solutions">
+          <strong>Try:</strong>
+          <ol>
+            <li>Refresh the page</li>
+            <li>Check your <a href="https://rapidapi.com/developer/dashboard" target="_blank">RapidAPI account</a></li>
+            <li>Try a different exercise category</li>
+          </ol>
+        </div>
+      `
+          : ""
+      }
+    </div>
+  `;
+}
+
+function showWarning(container, message, subMessage) {
+  container.innerHTML = `
+    <div class="warning">
+      ${message}<br>
+      <small>${subMessage}</small>
+    </div>
+  `;
+}
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}
+
+// Initialize when DOM is loaded
+document.addEventListener("DOMContentLoaded", init);

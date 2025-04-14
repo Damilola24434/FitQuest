@@ -659,3 +659,34 @@ button:active {
 .plan-actions button.delete-btn:hover {
   background: #ffcdd2;
 }
+/* Tablet and below */
+@media (max-width: 1024px) {
+  .exercise-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile - general */
+@media (max-width: 600px) {
+  .exercise-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* On mobile screens */
+@media (max-width: 600px) {
+  .watermark-cover {
+    bottom: 80px;
+    right: 10px;
+    font-size: 1rem;
+    opacity: 0.9; /* optional: reduce visibility more */
+  }
+}
+
+/* Smaller mobile - e.g. older phones */
+@media (max-width: 375px) {
+  .exercise-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem; /* optional: reduce spacing for tight screens */
+    padding: 0.5rem; /* optional: less padding */
+  }
+}

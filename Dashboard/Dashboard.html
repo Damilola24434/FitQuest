@@ -8,40 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <!-- NAVBAR -->
-  <div class="navbar-wrapper">
-    <nav class="navbar">
-      <div class="navbar-container">
-        <a href="#" class="navbar-brand">
-          <div class="logo-icon">FQ</div>
-          <div class="logo-text">FitQuest</div>
-        </a>
-
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-          <i class="fas fa-bars"></i>
-        </button>
-
-        <!-- Desktop Navigation -->
-        <div class="nav-links desktop-nav" id="desktopNavLinks">
-          <a href="#" class="nav-link active"><i class="fas fa-chart-line"></i> Dashboard</a>
-          <a href="#" class="nav-link"><i class="fas fa-dumbbell"></i> Workout</a>
-          <a href="#workout-planner" class="nav-link"><i class="fas fa-calendar-check"></i> Daily Workout</a>
-          <a href="#" class="nav-link"><i class="fas fa-calendar-alt"></i> Meal Planner</a>
-          <a href="#" class="nav-link"><i class="fas fa-user"></i> Logout</a>
-        </div>
-
-        <!-- Mobile Navigation -->
-        <div class="nav-links mobile-nav" id="mobileNavLinks">
-          <a href="#" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
-          <a href="#" class="nav-link"><i class="fas fa-dumbbell"></i> Exercises</a>
-          <a href="#" class="nav-link"><i class="fas fa-calendar-check"></i> My Plan</a>
-          <a href="#daily-workout" class="nav-link"><i class="fas fa-cog"></i> Daily Workout</a>
-          <a href="#" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </div>
-    </nav>
-  </div>
-
+  <div id="navbar-container"></div>
   <!-- MAIN DASHBOARD CONTENT -->
   <div class="container">
     <div class="main">
@@ -119,3 +86,10 @@
           <div class="result-message" id="resultMessage"></div>
         </div>
       </div>
+    </div> 
+  </div>
+</div> 
+
+<script src="dashboard.js"></script>
+</body>
+</html>
