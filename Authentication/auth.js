@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
         // Save current user and redirect
         localStorage.setItem("loggedInUser", JSON.stringify({ email, username }));
-        window.location.href = "../Workout/workout.html";
+        window.location.href = "../Dashboard/Dashboard.html";
       });
     }
   
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
         // Save current user and redirect
         localStorage.setItem("loggedInUser", JSON.stringify(user));
-        window.location.href = "../Workout/workout.html";
+        window.location.href = "../Dashboard/Dashboard.html";
       });
     }
   });
