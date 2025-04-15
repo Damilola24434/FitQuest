@@ -1,6 +1,19 @@
+const allCategories = [
+  "back",
+  "cardio",
+  "chest",
+  "lower arms",
+  "lower legs",
+  "neck",
+  "shoulders",
+  "upper arms",
+  "upper legs",
+  "waist"
+];
+
 // Configuration
 const CONFIG = {
-  API_KEY: "cc571f4ee2msh483e94de6e08a2bp1f7335jsnfc6dcf4027be",
+  API_KEY: "e9554985a2mshf6b1b46e256ac15p1d5ea8jsna119aab43782",
   API_HOST: "exercisedb.p.rapidapi.com",
   RATE_LIMIT_MS: 1000, // 1 second between requests
   MAX_RETRIES: 3,
