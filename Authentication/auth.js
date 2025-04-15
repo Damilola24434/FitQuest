@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const bcrypt = dcodeIO.bcrypt;
+
+    // Grab relevant form and button elements
     const signupForm = document.getElementById("signup-form");
     const loginForm = document.getElementById("login-form");
     const toggleBtn = document.getElementById("toggle-password");
@@ -7,12 +9,15 @@ document.addEventListener("DOMContentLoaded", () => {
     //Load and save users from localStorage
     const loadUsers = () => JSON.parse(localStorage.getItem("users") || "[]");
     const saveUsers = (users) => localStorage.setItem("users", JSON.stringify(users));
-  
+
+    // Get existing users
     let users = loadUsers();
-  
+
+    // Simple email validation regex
     const validateEmail = (email) =>
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  
+
+    // Check if password meets strength criteria
     const checkPasswordStrength = (password) => {
       const length = password.length >= 8;
       const upper = /[A-Z]/.test(password);
@@ -21,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const symbol = /[^A-Za-z0-9]/.test(password);
       return length && upper && lower && number && symbol;
     };
-  
+
+    // Toggle password visibility
     if (toggleBtn) {
       toggleBtn.addEventListener("click", () => {
         const pwdInput =
@@ -31,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (pwdInput) {
           const isHidden = pwdInput.getAttribute("type") === "password";
           pwdInput.setAttribute("type", isHidden ? "text" : "password");
-          toggleBtn.textContent = isHidden ? "🙈" : "👁️";
+          toggleBtn.textContent = isHidden ? "🙈" : "👁️"; // Change icon
         }
       });
     }
@@ -42,13 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const passwordInput = document.getElementById("signup-password");
       const emailHelp = document.getElementById("emailHelp");
       const passwordHelp = document.getElementById("passwordHelp");
-  
+
+      // Live email validation feedback
       emailInput.addEventListener("input", () => {
         emailHelp.textContent = validateEmail(emailInput.value)
           ? ""
           : "Invalid email format.";
       });
-  
+
+      // Live password strength feedback
       passwordInput.addEventListener("input", () => {
         passwordHelp.textContent = checkPasswordStrength(passwordInput.value)
           ? ""
@@ -61,7 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = emailInput.value.trim();
         const username = document.getElementById("signup-username").value.trim();
         const password = passwordInput.value;
-  
+
+        // Final email and password validation
         if (!validateEmail(email)) {
           alert("Please enter a valid email.");
           return;
@@ -85,7 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Username already taken. Please choose another one.");
           return;
         }
-  
+
+        // Hash the password using bcrypt
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
   
@@ -107,7 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
         const identifier = document.getElementById("login-identifier").value.trim();
         const password = document.getElementById("login-password").value;
-  
+
+        // Find user by email or username
         const user = users.find(
           (u) => u.email === identifier || u.username === identifier
         );
@@ -116,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("User not found");
           return;
         }
-  
+        // Compare password using bcrypt
         const isMatch = bcrypt.compareSync(password, user.password);
         if (!isMatch) {
           alert("Incorrect password");

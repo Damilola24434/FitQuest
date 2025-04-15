@@ -13,22 +13,28 @@
         <div class="container">
             <h1>Create your account</h1>
             <p>Begin your fitness journey</p>
+             <!-- Sign-up form with basic validations -->
             <form id="signup-form" novalidate>
+                <!-- Email input -->
                 <label for="signup-email">Email</label>
                 <input type="email" id="signup-email" required aria-describedby="emailHelp" />
                 <small id="emailHelp" class="help-text"></small>
 
+                <!-- Username input -->
                 <label for="signup-username">Username</label>
                 <input type="text" id="signup-username" required />
 
+                <!-- Password input with show/hide toggle -->
                 <label for="signup-password">Password</label>
                 <div class="password-container">
                     <input type="password" id="signup-password" required aria-describedby="passwordHelp" />
                     <button type="button" id="toggle-password" aria-label="Show password">👁️</button>
                 </div>
 
+                <!-- Submit button -->
                 <button type="submit">Sign Up</button>
             </form>
+            <!-- Link to login page -->
             <p>Already have an account? <a href="LogIn.html">log-in</a></p>
         </div>
     </body>
