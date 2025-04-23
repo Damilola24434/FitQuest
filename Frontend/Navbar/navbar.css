@@ -111,6 +111,44 @@ body {
   width: 100%;
 }
 
+/* Make logout buttons match nav-link style */
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+/* Hover effect just like nav-link */
+.logout-btn:hover {
+  color: #ddd;
+}
+
+/* Desktop logout button underline effect */
+.desktop-nav .logout-btn {
+  position: relative;
+}
+
+.desktop-nav .logout-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ddd;
+  transition: width 0.3s ease;
+}
+
+.desktop-nav .logout-btn:hover::after {
+  width: 100%;
+}
+
 /* Mobile menu button */
 .mobile-menu-btn {
   display: none;
@@ -160,6 +198,17 @@ body {
     transform: translateY(0);
     padding: 1rem 0;
   }
+  .mobile-nav .logout-btn {
+    width: 100%;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .mobile-nav .logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
 
   .mobile-nav .nav-link {
     width: 100%;
