@@ -1,16 +1,16 @@
 /* Workout page variables */
 :root {
-  --primary-purple: #5A4FCF;
-  --dark-purple: #3A3288;
-  --light-purple: #9188F0;
+  --primary-purple: #5a4fcf;
+  --dark-purple: #3a3288;
+  --light-purple: #9188f0;
   --bg-white: #ffffff;
   --gray-text: #555;
   --surface: #ffffff;
   --text-primary: #2d3436;
   --text-secondary: #636e72;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -18,7 +18,7 @@
 
 /* Base styles */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 0;
   margin: 0;
   background-color: #f8f9fa;
@@ -46,7 +46,7 @@ body {
   text-align: center;
   border-radius: 30px;
   z-index: 2;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   text-transform: capitalize;
   letter-spacing: 0.5px;
   backdrop-filter: blur(1px);
@@ -86,13 +86,13 @@ body {
 
 @media (max-width: 768px) {
   .watermark-cover {
-      /* Reset any responsive changes */
-      bottom: 30% !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      width: 75% !important;
-      height: 25% !important;
-      font-size: 0.9rem !important;
+    /* Reset any responsive changes */
+    bottom: 30% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 75% !important;
+    height: 25% !important;
+    font-size: 0.9rem !important;
   }
 }
 
@@ -156,7 +156,6 @@ h1 {
 .clear-search:hover {
   color: var(--dark-purple);
 }
-
 
 /* Category buttons */
 .category-buttons {
@@ -225,19 +224,18 @@ button:active {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .exercise-card img {
-      height: 200px; /* Fixed height on mobile */
+    height: 200px; /* Fixed height on mobile */
   }
-  
+
   .daily-exercise-content {
-      flex-direction: column;
+    flex-direction: column;
   }
-  
+
   .daily-exercise-gif {
-      width: 100%;
-      max-width: 100%;
+    width: 100%;
+    max-width: 100%;
   }
 }
-
 
 .gif-container img {
   position: absolute;
@@ -258,7 +256,11 @@ button:active {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(106, 13, 173, 0.15), rgba(155, 89, 182, 0.1));
+  background: linear-gradient(
+    45deg,
+    rgba(106, 13, 173, 0.15),
+    rgba(155, 89, 182, 0.1)
+  );
   z-index: 1;
 }
 
@@ -278,7 +280,7 @@ button:active {
   text-align: center;
   border-radius: 30px;
   z-index: 2;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   text-transform: capitalize;
   letter-spacing: 0.5px;
   backdrop-filter: blur(1px);
@@ -296,7 +298,7 @@ button:active {
 
 .watermark-cover:hover {
   background: rgba(84, 10, 140, 0.95);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 8px 25px;
 }
 
@@ -348,7 +350,7 @@ button:active {
 }
 
 .instructions-list li::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0.5em;
@@ -416,7 +418,9 @@ button:active {
   font-size: 1rem;
 }
 
-.new-plan-btn, .save-plan-btn, .load-plans-btn {
+.new-plan-btn,
+.save-plan-btn,
+.load-plans-btn {
   padding: 0.75rem 1.5rem;
   background: var(--primary-purple);
   color: white;
@@ -427,7 +431,9 @@ button:active {
   transition: all 0.2s ease;
 }
 
-.new-plan-btn:hover, .save-plan-btn:hover, .load-plans-btn:hover {
+.new-plan-btn:hover,
+.save-plan-btn:hover,
+.load-plans-btn:hover {
   background: var(--dark-purple);
   transform: translateY(-2px);
 }
@@ -438,7 +444,8 @@ button:active {
   gap: 2rem;
 }
 
-.exercise-selection, .current-plan {
+.exercise-selection,
+.current-plan {
   background: #f9f9ff;
   border-radius: var(--radius-lg);
   padding: 1.5rem;
@@ -446,7 +453,8 @@ button:active {
   overflow-y: auto;
 }
 
-.selection-container, .plan-container {
+.selection-container,
+.plan-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
@@ -554,7 +562,7 @@ button:active {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
@@ -603,7 +611,8 @@ button:active {
   color: var(--text-primary);
 }
 
-.form-group input, .form-group textarea {
+.form-group input,
+.form-group textarea {
   padding: 0.75rem;
   border: 1px solid #e0e0e0;
   border-radius: var(--radius-sm);
@@ -692,35 +701,35 @@ button:active {
 /* Responsive styles */
 @media (max-width: 1024px) {
   .exercise-grid {
-      grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .planner-columns {
-      grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   .exercise-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  
+
   .gif-container {
-      height: 200px;
+    height: 200px;
   }
-  
+
   .watermark-cover {
-      font-size: 0.85rem;
-      padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
   }
 
   .planner-controls {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .plan-name-input {
-      min-width: 100%;
+    min-width: 100%;
   }
 }
 /* Scroll to Top Button */
@@ -753,7 +762,6 @@ button:active {
   transform: translateY(0);
 }
 
-
 /* Daily Workout Styles */
 .daily-workout-container {
   background: linear-gradient(135deg, #6e8efb, #a777e3);
@@ -774,7 +782,11 @@ button:active {
   right: -50%;
   width: 100%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
   transform: rotate(30deg);
 }
 
@@ -857,7 +869,7 @@ button:active {
 .daily-exercise-gif {
   width: 100%;
   max-width: 150px;
-  height:  100%;
+  height: 100%;
   border-radius: 8px;
   object-fit: cover;
   border: 3px solid rgba(255, 255, 255, 0.2);
@@ -936,53 +948,53 @@ button:active {
 /* Tablets (769px - 1024px) */
 @media (max-width: 1024px) {
   .daily-title {
-      font-size: 22px;
+    font-size: 22px;
   }
 
   .daily-exercise-name {
-      font-size: 18px;
+    font-size: 18px;
   }
 
   .daily-exercise-content {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .daily-exercise-gif {
-      width: 20%;
-      max-width: 20%;
-      height: 40%;
+    width: 20%;
+    max-width: 20%;
+    height: 40%;
   }
 }
 
 /* Mobile (max-width: 768px) */
 @media (max-width: 768px) {
   .daily-title {
-      font-size: 20px;
+    font-size: 20px;
   }
 
   .daily-date {
-      font-size: 13px;
+    font-size: 13px;
   }
 
   .daily-exercise-name {
-      font-size: 17px;
+    font-size: 17px;
   }
 
   .daily-exercise-content {
-      flex-direction: column;
-      gap: 15px;
-      align-items: center;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
   }
 
   .daily-exercise-gif {
-      width: 40%;
-      max-width: 40%;
-      height:  40%;
+    width: 40%;
+    max-width: 40%;
+    height: 40%;
   }
 
   .daily-exercise-details {
-      width: 100%;
+    width: 100%;
   }
 }
 .scroll-to-top {
@@ -1005,4 +1017,3 @@ button:active {
 .scroll-to-top:hover {
   background-color: #555;
 }
-

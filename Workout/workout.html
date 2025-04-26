@@ -5,105 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FitQuest Workout</title>
 
-    <!-- Linking the main CSS file for workout page styling -->
+    <!-- Styling for html page. Linking the main CSS which is workout.css -->
     <link rel="stylesheet" href="workout.css" />
 
-    <!-- This link is for custom fonts from Google (Inter font family) -->
+    <!-- Fonts  to make it  fancy  and nice-->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- This is to use Font Awesome icons like the arrow and calendar icons -->
+    <!-- Icons, because text alone just looks minimal  -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
   </head>
+
   <body>
-    <!-- This is where the navbar.html content will be injected using JavaScript -->
-    <div id="navbar-container"></div>
+    <!-- Inject navbar later...  it's being handled via JS. particulalarly workout.js -->
+    <nav id="navbar-container"></nav>
 
-    <div class="container">
-      <!-- This whole section is the main workout area -->
+    <main class="container">
+      <!-- Workout Search + Categories Section -->
+      <section class="search-section">
+        <header class="search-header">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search exercises..."
+            oninput="handleSearchInput()"
+          />
+          <!-- Only shows up when user types... because UX matters for user experience-->
+          <button
+            class="clear-search"
+            onclick="clearSearch()"
+            style="display: none"
+          >
+            ×
+          </button>
+        </header>
 
-      <!-- This is the search bar users will use to find specific exercises -->
-      <div class="search-container">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search exercises..."
-          oninput="handleSearchInput()"
-        />
-        <!-- This button will appear to clear the search input when it's not empty -->
-        <button
-          class="clear-search"
-          onclick="clearSearch()"
-          style="display: none"
-        >
-          ×
-        </button>
-      </div>
+        <nav class="category-nav">
+          <!--  muscles will need to be categorized i am aiming for user friendlyness-->
+          <button onclick="fetchExercises('back')">Back</button>
+          <button onclick="fetchExercises('cardio')">Cardio</button>
+          <button onclick="fetchExercises('chest')">Chest</button>
+          <button onclick="fetchExercises('lower arms')">Lower Arms</button>
+          <button onclick="fetchExercises('lower legs')">Lower Legs</button>
+          <button onclick="fetchExercises('neck')">Neck</button>
+          <button onclick="fetchExercises('shoulders')">Shoulders</button>
+          <button onclick="fetchExercises('upper arms')">Upper Arms</button>
+          <button onclick="fetchExercises('upper legs')">Upper Legs</button>
+          <button onclick="fetchExercises('waist')">Waist</button>
+          <button onclick="fetchAllExercises()">All Exercises</button>
+        </nav>
+      </section>
 
-      <!-- These buttons allow users to filter exercises based on muscle group -->
-      <div class="category-buttons">
-        <button onclick="fetchExercises('back')">Back</button>
-        <button onclick="fetchExercises('cardio')">Cardio</button>
-        <button onclick="fetchExercises('chest')">Chest</button>
-        <button onclick="fetchExercises('lower arms')">Lower Arms</button>
-        <button onclick="fetchExercises('lower legs')">Lower Legs</button>
-        <button onclick="fetchExercises('neck')">Neck</button>
-        <button onclick="fetchExercises('shoulders')">Shoulders</button>
-        <button onclick="fetchExercises('upper arms')">Upper Arms</button>
-        <button onclick="fetchExercises('upper legs')">Upper Legs</button>
-        <button onclick="fetchExercises('waist')">Waist</button>
-        <button onclick="fetchAllExercises()">All Exercises</button>
-      </div>
+      <!-- Exercise list will appear here -->
+      <section id="exerciseContainer" class="exercise-list">
+        <!-- Gets filled by JS later. if everything works -->
+      </section>
 
-      <!-- This section will hold all the exercises fetched from the API  -->
-      <div id="exerciseContainer"></div>
-
-      <!-- Modal that pops up when a user clicks on an exercise for more details -->
-      <div id="exerciseDetailsModal" class="modal">
+      <!-- Modal pop-up thingy for more deets on clicked exercise -->
+      <aside
+        id="exerciseDetailsModal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+      >
         <div class="modal-content">
-          <!-- Close button to hide the modal -->
-          <span class="close-modal" onclick="closeModal()">&times;</span>
+          <button class="close-modal" onclick="closeModal()" aria-label="Close">
+            &times;
+          </button>
           <h3 id="modalExerciseName">Exercise Name</h3>
           <div class="modal-exercise-details">
-            <!-- This button currently just closes the modal -->
             <button onclick="closeModal()" class="add-to-plan-btn">
               Close
             </button>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="daily-workout-container" id="daily-workout">
-        <div class="daily-header">
-            <h2 class="daily-title">
-                <i class="fas fa-calendar-star"></i>
-                Exercise of the Day
-            </h2>
-            <div class="daily-date" id="daily-date"></div>
-        </div>
-        
-        <div id="workout-planner" class="daily-content">
-            <div id="daily-exercise-container">
-                <div class="loading-daily">Loading today's featured exercise...</div>
-            </div>
-            
-            <p class="daily-motivation">
-                "The only bad workout is the one that didn't happen."
-            </p>
-        </div>
+      </aside>
+    </main>
 
+    <!-- This is like a mini motivational dashboard for daily workout -->
+    <section class="daily-workout-container" id="daily-workout">
+      <header class="daily-header">
+        <h2 class="daily-title">
+          <i class="fas fa-calendar-star"></i>
+          Exercise of the Day
+        </h2>
+        <p class="daily-date" id="daily-date"></p>
+      </header>
 
-        <button id="scrollToTopBtn" class="scroll-to-top" title="Go to top">
-            <i class="fas fa-arrow-up"></i>
-        </button>
-    
+      <article id="workout-planner" class="daily-content">
+        <section id="daily-exercise-container">
+          <p class="loading-daily">Loading today's featured exercise...</p>
+        </section>
 
-    <!-- Linking JavaScript at the bottom for proper loading -->
+        <blockquote class="daily-motivation">
+          "The only bad workout is the one that didn't happen."
+        </blockquote>
+      </article>
+    </section>
+
+    <!-- will scroll and then — back to the top aiming for user friendly feature, -->
+    <button id="scrollToTopBtn" class="scroll-to-top" title="Go to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Directs to javascript workout,js -->
     <script src="workout.js"></script>
   </body>
 </html>
