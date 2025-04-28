@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+</head>
+<body>
+
+<!-- Feedback form for user input -->
+<form id="feedback-form">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+  
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
+  
+  <label for="comment">Comment:</label>
+  <textarea id="comment" name="comment" required></textarea>
+  
+  <button type="submit">Submit Feedback</button>
+</form>
+
+<!-- List where feedback will be displayed -->
+<ul id="feedback-list"></ul>
+
+<!-- JavaScript code included in the HTML file -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const feedbackForm = document.getElementById("feedback-form");
+
+  // Submit feedback logic
+  if (feedbackForm) {
+    feedbackForm.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Prevent form from submitting the default way
+
+      // Get form input values
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const comment = document.getElementById("comment").value.trim();
+
+      // Check if all fields are filled out
+      if (!name || !email || !comment) {
+        alert("All fields are required.");
+        return;
+      }
+
+      try {
+        // Send feedback data using POST method to the server
+        const res = await fetch("http://127.0.0.1:8000/routes/submit-feedback.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name, email, comment }),
+        });
+
+        const data = await res.json();
+        alert(data.message);
+
+        if (res.ok) {
+          feedbackForm.reset();  // Optionally clear the form after successful submission
+        }
+      } catch (err) {
+        console.error("Feedback submission failed:", err);
+        alert("Failed to submit feedback. Please try again.");
+      }
+    });
+  }
+
+  // Fetch feedback on page load using GET method
+ 
+  // Fetch the feedback when the page loads
+  
+});
+</script>
+
+</body>
+</html>
