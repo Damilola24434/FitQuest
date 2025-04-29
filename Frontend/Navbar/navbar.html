@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Required meta tags for character encoding and responsiveness -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Page title -->
     <title>FitQuest Navigation</title>
+
+    <!-- Custom CSS for styling the navbar -->
     <link rel="stylesheet" href="../Navbar/navbar.css" />
+
+    <!-- Font Awesome for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
   </head>
+
   <body>
-    <!-- Wrapper container for the navbar -->
-    <div class="navbar-wrapper">
-      <nav class="navbar">
-        <div class="navbar-container">
+    <!-- Header section containing the entire navigation bar -->
+    <header class="navbar-wrapper">
+      <!-- Semantic <nav> element represents the main navigation -->
+      <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <!-- Navigation container -->
+        <section class="navbar-container">
+          <!-- Brand logo and text linking to homepage -->
           <a href="#" class="navbar-brand">
-            <div class="logo-icon">FQ</div>
-            <div class="logo-text">FitQuest</div>
+            <!-- Logo icon -->
+            <span class="logo-icon">FQ</span>
+            <!-- Logo text -->
+            <span class="logo-text">FitQuest</span>
           </a>
 
-          <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <!-- Button for toggling mobile menu -->
+          <button
+            class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            aria-label="Toggle mobile menu"
+          >
             <i class="fas fa-bars"></i>
           </button>
-
           <!-- Desktop Navigation -->
           <div class="nav-links desktop-nav" id="desktopNavLinks">
             <a href="../Dashboard/Dashboard.html" class="nav-link"
@@ -67,6 +84,7 @@
           </div>
         </div>
       </nav>
-    </div>
+    </header>
+    <!-- End of navbar wrapper -->
   </body>
 </html>
