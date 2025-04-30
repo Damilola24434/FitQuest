@@ -2,7 +2,8 @@
 function handleCors() {
     $allowedOrigins = [
         "http://127.0.0.1:3000",
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "https://fitquest-1skw.onrender.com"
     ];
 
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -27,11 +28,12 @@ function handleCors() {
 function configureSession() {
     if (session_status() === PHP_SESSION_NONE) {
         ini_set('session.cookie_samesite', 'None');
+        ini_set('session.cookie_secure', '1');
         session_set_cookie_params([
             'lifetime' => 86400,
             'path' => '/',
-            'domain' =>  '127.0.0.1',
-            'secure' => false, 
+            'domain' =>  '',
+            'secure' => true, 
             'httponly' => true,
             'samesite' => 'None'
         ]);
