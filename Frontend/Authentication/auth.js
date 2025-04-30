@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Check if user is already logged in
-  fetch("http://127.0.0.1:8000/routes/check-session.php", {
+  fetch("https://fitquest-backend-3pdn.onrender.com/routes/check-session.php", {
     method: "GET",
     credentials: "include",
     headers: {
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("signup-password").value;
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/routes/auth.php", {
+        const res = await fetch("https://fitquest-backend-3pdn.onrender.com/routes/auth.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("login-password").value;
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/routes/auth.php", {
+        const res = await fetch("https://fitquest-backend-3pdn.onrender.com/routes/auth.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

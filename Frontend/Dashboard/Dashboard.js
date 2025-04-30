@@ -12,7 +12,7 @@ fetch("../Navbar/navbar.html")
   });
 
 // Fetch session to get username
-fetch("http://127.0.0.1:8000/routes/check-session.php", {
+fetch("https://fitquest-backend-3pdn.onrender.com//check-session.php", {
   method: "GET",
   credentials: "include",
   headers: {
