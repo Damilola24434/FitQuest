@@ -1,3 +1,38 @@
+// First things first - let's load up that navbar from our components
+fetch("../Navbar/navbar.html")
+  .then((response) => response.text())
+  .then((html) => {
+    // Pop the navbar HTML into our container
+    document.getElementById("navbar-container").innerHTML = html;
+
+    // Now that the HTML is loaded, let's grab the navbar JS too
+    const script = document.createElement("script");
+    script.src = "../Navbar/navbar.js";
+    document.body.appendChild(script);
+  });
+
+// Fetch session to get username
+fetch("http://127.0.0.1:8000/routes/check-session.php", {
+  method: "GET",
+  credentials: "include",
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+  .then((res) => res.json())
+  .then((data) => {
+    console.log("Session data:", data);
+    if (data.loggedIn) {
+      const usernameSpan = document.getElementById("username-display");
+      if (usernameSpan) {
+        usernameSpan.textContent = "@" + data.user.username;
+      }
+    } 
+  })
+  .catch((err) => {
+    console.error("Session check failed:", err);
+  });
+
 // Track progress
 // Stores the user's daily fitness goals (target values)
 let dailyGoals = {
