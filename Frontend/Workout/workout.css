@@ -1,71 +1,74 @@
-/* Workout page variables */
+/* 
+ * Workout App Styles
+ * A clean, modern design with purple accents and responsive layout
+ */
+
+/* ======================
+   Design Tokens & Variables 
+   ====================== */
 :root {
-  --primary-purple: #5a4fcf;
-  --dark-purple: #3a3288;
-  --light-purple: #9188f0;
-  --bg-white: #ffffff;
-  --gray-text: #555;
-  --surface: #ffffff;
-  --text-primary: #2d3436;
-  --text-secondary: #636e72;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  /* Color Palette */
+  --primary-purple: #5a4fcf; /* Main brand purple */
+  --dark-purple: #3a3288; /* Darker purple for accents */
+  --light-purple: #9188f0; /* Lighter purple for highlights */
+  --bg-white: #ffffff; /* Pure white background */
+  --gray-text: #555; /* Medium gray for secondary text */
+  --surface: #ffffff; /* Surface color for cards */
+
+  /* Text Colors */
+  --text-primary: #2d3436; /* Main text color - dark gray */
+  --text-secondary: #636e72; /* Secondary text - medium gray */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08); /* Small shadow for subtle elevation */
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1); /* Medium shadow for cards */
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1); /* Large shadow for prominent elements */
+
+  /* Border Radius */
+  --radius-sm: 8px; /* Small radius for buttons, inputs */
+  --radius-md: 12px; /* Medium radius for cards */
+  --radius-lg: 16px; /* Large radius for containers */
 }
 
-/* Base styles */
+/* ======================
+       Base Styles & Reset 
+       ====================== */
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 0;
   margin: 0;
-  background-color: #f8f9fa;
+  background-color: #f8f9fa; /* Light gray background */
   color: var(--text-primary);
-  min-height: 100vh;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  min-height: 100vh; /* Full viewport height */
+  line-height: 1.5; /* Comfortable line spacing */
+  -webkit-font-smoothing: antialiased; /* Smooth font rendering */
   -moz-osx-font-smoothing: grayscale;
-}
-/* Watermark Cover - Fixed Positioning */
-.watermark-cover {
-  position: absolute;
-  bottom: 30%; /* Use percentage for consistent positioning */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 75%; /* Relative width */
-  max-width: 300px; /* Maximum width */
-  height: 25%; /* Relative height */
-  min-height: 40px; /* Minimum height */
-  padding: 0.5rem 1rem;
-  background: rgba(106, 13, 173, 0.85);
-  color: white;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-align: center;
-  border-radius: 30px;
-  z-index: 2;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(1px);
-  border: none;
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Prevent any responsive changes */
-  margin: 0 !important;
-  top: auto !important;
-  right: auto !important;
+  scroll-padding-top: 70px; /* Account for fixed navbar */
 }
 
-/* GIF Container - Maintain aspect ratio */
+/* 
+     * Container for main content 
+     * Centers content with max-width and padding
+     */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Main heading style */
+h1 {
+  color: var(--dark-purple);
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  font-size: clamp(1.8rem, 5vw, 2.4rem); /* Responsive font scaling */
+  font-weight: 700;
+  letter-spacing: -0.5px; /* Slightly tighter letter spacing */
+}
+
+/* ======================
+       Exercise GIF Container 
+       ====================== */
 .gif-container {
   position: relative;
   width: 100%;
@@ -73,56 +76,75 @@ body {
   overflow: hidden;
 }
 
+/* gif-container img  */
 .gif-container img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Ensure images cover container */
 }
 
-/* Remove any responsive positioning for the watermark */
-
-@media (max-width: 768px) {
-  .watermark-cover {
-    /* Reset any responsive changes */
-    bottom: 30% !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 75% !important;
-    height: 25% !important;
-    font-size: 0.9rem !important;
-  }
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-h1 {
-  color: var(--dark-purple);
+/* 
+     * Watermark overlay on exercise GIFs 
+     * Positioned at bottom with purple background
+     */
+.watermark-cover {
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%); /* Perfect horizontal centering */
+  width: 75%;
+  max-width: 300px;
+  height: 25%;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  background: rgba(106, 13, 173, 0.85);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
   text-align: center;
-  margin: 0 0 1.5rem 0;
-  font-size: clamp(1.8rem, 5vw, 2.4rem);
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  border-radius: 30px; /* Pill-shaped corners */
+  z-index: 2;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(1px); /* Slight blur for depth */
+  border: none;
+  line-height: 1.3;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ... if text too long */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease-out; /* Smooth hover effects */
 }
 
-/* Search styles */
+/* Hover state for watermark */
+.watermark-cover:hover {
+  background: rgba(84, 10, 140, 0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 8px 25px;
+}
+
+/* ======================
+       Search Component 
+       ====================== */
 .search-container {
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Reasonable max width */
   margin-left: auto;
   margin-right: auto;
 }
 
+/* Search input field */
 #searchInput {
   padding: 0.8rem 1rem;
   width: 100%;
@@ -130,21 +152,23 @@ h1 {
   border-radius: var(--radius-md);
   font-size: 1rem;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Smooth transitions */
   box-shadow: var(--shadow-sm);
   background-color: var(--surface);
 }
 
+/* Focus state for search input */
 #searchInput:focus {
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(90, 79, 207, 0.1);
+  box-shadow: 0 0 0 3px rgba(90, 79, 207, 0.1); /* Purple glow */
 }
 
+/* Clear search button (X icon) */
 .clear-search {
   position: absolute;
   right: 1rem;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* Perfect vertical centering */
   background: none;
   border: none;
   color: var(--gray-text);
@@ -152,21 +176,24 @@ h1 {
   font-size: 1.25rem;
   opacity: 1;
 }
-
+/*  .clear-search:hover */
 .clear-search:hover {
   color: var(--dark-purple);
 }
 
-/* Category buttons */
+/* ======================
+       Category Filter Buttons 
+       ====================== */
 .category-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-wrap: wrap; /* Wrap on small screens */
+  gap: 0.75rem; /* Consistent spacing */
   justify-content: center;
   margin-bottom: 2.5rem;
   padding: 0 1rem;
 }
 
+/* Base button styles */
 button {
   padding: 0.75rem 1.25rem;
   background: var(--surface);
@@ -176,80 +203,51 @@ button {
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease; /* Smooth state changes */
   box-shadow: var(--shadow-sm);
 }
 
+/* Button hover and active states */
 button:hover {
   background: var(--primary-purple);
   color: white;
   border-color: transparent;
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* Slight lift effect */
   box-shadow: var(--shadow-md);
 }
-
+/*   */
 button:active {
-  transform: translateY(0);
+  transform: translateY(0); /* Push down when clicked */
 }
 
-/* Exercise grid styles */
+/* ======================
+       Exercise Grid Layout 
+       ====================== */
 .exercise-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr); /* 3-column layout by default */
+  gap: 1.5rem; /* Consistent spacing */
   padding: 0.5rem;
 }
 
+/* Exercise card styling */
 .exercise-card {
   border: none;
   border-radius: var(--radius-lg);
   background: var(--surface);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Smooth hover transitions */
   overflow: hidden;
   position: relative;
 }
 
+/* Card hover effect */
 .exercise-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px); /* Lift effect */
   box-shadow: var(--shadow-md);
 }
 
-.gif-container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 75%; /* 4:3 aspect ratio */
-  overflow: hidden;
-}
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .exercise-card img {
-    height: 200px; /* Fixed height on mobile */
-  }
-
-  .daily-exercise-content {
-    flex-direction: column;
-  }
-
-  .daily-exercise-gif {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-.gif-container img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.exercise-card:hover .gif-container img {
-  transform: scale(1.03);
-}
-
+/* Exercise GIF overlay effect */
 .gif-overlay {
   position: absolute;
   top: 0;
@@ -264,62 +262,28 @@ button:active {
   z-index: 1;
 }
 
-.watermark-cover {
-  position: absolute;
-  bottom: 115px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 75%;
-  height: 25%;
-  max-width: 90%;
-  padding: 0;
-  background: rgba(106, 13, 173, 0.85);
-  color: white;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-align: center;
-  border-radius: 30px;
-  z-index: 2;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(1px);
-  border: none;
-  transition: all 0.25s ease-out;
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.watermark-cover:hover {
-  background: rgba(84, 10, 140, 0.95);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 8px 25px;
-}
-
+/* Exercise content area below GIF */
 .exercise-content {
   padding: 1.25rem;
 }
 
+/* Collapsible exercise details */
 .exercise-details {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth expand */
   background: #f9f9ff;
   margin: 0 -1.25rem;
 }
 
+/* Expanded state for details */
 .exercise-details.expanded {
   max-height: 500px;
   padding: 1.25rem;
   border-top: 1px solid rgba(90, 79, 207, 0.1);
 }
 
+/* Exercise metadata styling */
 .exercise-info {
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
@@ -327,7 +291,7 @@ button:active {
   display: flex;
   align-items: flex-start;
 }
-
+/* .exercise-info strong */
 .exercise-info strong {
   color: var(--primary-purple);
   font-weight: 600;
@@ -335,13 +299,14 @@ button:active {
   display: inline-block;
 }
 
+/* Instructions list styling */
 .instructions-list {
   padding-left: 1rem;
   margin-top: 0.75rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
-
+/* .instructions-list li */
 .instructions-list li {
   margin-bottom: 0.5rem;
   position: relative;
@@ -349,6 +314,7 @@ button:active {
   line-height: 1.5;
 }
 
+/* Custom bullet points */
 .instructions-list li::before {
   content: "";
   position: absolute;
@@ -360,8 +326,9 @@ button:active {
   border-radius: 50%;
 }
 
+/* Category section headings */
 .category-title {
-  grid-column: 1 / -1;
+  grid-column: 1 / -1; /* Span full width */
   color: var(--dark-purple);
   font-size: 1.5rem;
   font-weight: 600;
@@ -370,13 +337,14 @@ button:active {
   border-bottom: 2px solid rgba(90, 79, 207, 0.1);
 }
 
+/* Loading and error states */
 .loading {
   text-align: center;
   font-size: 1rem;
   color: var(--dark-purple);
   padding: 3rem;
 }
-
+/* error */
 .error {
   color: #d32f2f;
   text-align: center;
@@ -386,7 +354,9 @@ button:active {
   margin: 2rem 0;
 }
 
-/* Workout Planner Styles */
+/* ======================
+       Workout Planner Section
+       ====================== */
 .workout-planner-container {
   margin-top: 3rem;
   background: white;
@@ -394,7 +364,7 @@ button:active {
   padding: 2rem;
   box-shadow: var(--shadow-sm);
 }
-
+/*    .planner-title*/
 .planner-title {
   color: var(--dark-purple);
   margin-bottom: 1.5rem;
@@ -402,14 +372,15 @@ button:active {
   text-align: center;
 }
 
+/* Planner control buttons */
 .planner-controls {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Wrap on small screens */
 }
-
-.plan-name-input {
+/* Planner control buttons */
+.planner-title .plan-name-input {
   flex: 1;
   min-width: 250px;
   padding: 0.75rem 1rem;
@@ -418,6 +389,7 @@ button:active {
   font-size: 1rem;
 }
 
+/* Shared button styles for planner */
 .new-plan-btn,
 .save-plan-btn,
 .load-plans-btn {
@@ -431,6 +403,7 @@ button:active {
   transition: all 0.2s ease;
 }
 
+/* Button hover states */
 .new-plan-btn:hover,
 .save-plan-btn:hover,
 .load-plans-btn:hover {
@@ -438,21 +411,24 @@ button:active {
   transform: translateY(-2px);
 }
 
+/* Two-column layout for planner */
 .planner-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 
+/* Left and right planner columns */
 .exercise-selection,
 .current-plan {
   background: #f9f9ff;
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   height: 600px;
-  overflow-y: auto;
+  overflow-y: auto; /* Scrollable content */
 }
 
+/* Exercise selection list */
 .selection-container,
 .plan-container {
   display: grid;
@@ -461,6 +437,7 @@ button:active {
   margin-top: 1rem;
 }
 
+/* Exercise items in selection list */
 .selection-exercise {
   background: white;
   padding: 1rem;
@@ -478,6 +455,7 @@ button:active {
   box-shadow: var(--shadow-md);
 }
 
+/* Exercise thumbnails */
 .selection-exercise img {
   width: 60px;
   height: 60px;
@@ -485,6 +463,7 @@ button:active {
   border-radius: var(--radius-sm);
 }
 
+/* Exercise items in current plan */
 .plan-exercise {
   background: white;
   padding: 1rem;
@@ -513,6 +492,7 @@ button:active {
   margin-right: 1rem;
 }
 
+/* Exercise detail pills (sets, reps etc) */
 .plan-exercise-details {
   display: flex;
   gap: 1rem;
@@ -536,6 +516,7 @@ button:active {
   width: 100%;
 }
 
+/* Remove exercise button */
 .remove-exercise {
   position: absolute;
   top: 0.5rem;
@@ -553,7 +534,9 @@ button:active {
   padding: 2rem;
 }
 
-/* Modal Styles */
+/* ======================
+       Modal Dialogs
+       ====================== */
 .modal {
   display: none;
   position: fixed;
@@ -562,7 +545,7 @@ button:active {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
 }
 
 .modal-content {
@@ -600,6 +583,7 @@ button:active {
   gap: 1rem;
 }
 
+/* Form group styling */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -621,9 +605,10 @@ button:active {
 
 .form-group textarea {
   min-height: 100px;
-  resize: vertical;
+  resize: vertical; /* Allow vertical resizing only */
 }
 
+/* Add to plan button in modal */
 .add-to-plan-btn {
   padding: 0.75rem;
   background: var(--primary-purple);
@@ -640,7 +625,7 @@ button:active {
   background: var(--dark-purple);
 }
 
-/* Saved Plans Modal */
+/* Saved plans list */
 .saved-plans-container {
   display: grid;
   grid-template-columns: 1fr;
@@ -666,6 +651,7 @@ button:active {
   font-size: 0.9rem;
 }
 
+/* Plan action buttons */
 .plan-actions {
   display: flex;
   gap: 0.5rem;
@@ -698,71 +684,9 @@ button:active {
   background: #ffcdd2;
 }
 
-/* Responsive styles */
-@media (max-width: 1024px) {
-  .exercise-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .planner-columns {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .exercise-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .gif-container {
-    height: 200px;
-  }
-
-  .watermark-cover {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.8rem;
-  }
-
-  .planner-controls {
-    flex-direction: column;
-  }
-
-  .plan-name-input {
-    min-width: 100%;
-  }
-}
-/* Scroll to Top Button */
-.scroll-to-top {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: var(--primary-purple);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: var(--shadow-lg);
-  z-index: 999;
-  transition: all 0.3s ease;
-}
-
-.scroll-to-top:hover {
-  background-color: var(--dark-purple);
-  transform: translateY(-3px);
-}
-
-.scroll-to-top:active {
-  transform: translateY(0);
-}
-
-/* Daily Workout Styles */
+/* ======================
+       Daily Workout Section
+       ====================== */
 .daily-workout-container {
   background: linear-gradient(135deg, #6e8efb, #a777e3);
   color: white;
@@ -772,9 +696,10 @@ button:active {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
-  scroll-margin-top: 70px;
+  scroll-margin-top: 70px; /* Account for fixed navbar */
 }
 
+/* Decorative background element */
 .daily-workout-container::before {
   content: "";
   position: absolute;
@@ -828,9 +753,10 @@ button:active {
   position: relative;
 }
 
+/* Individual exercise in daily workout */
 .daily-exercise {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px); /* Frosted glass effect */
   border-radius: 10px;
   padding: 20px;
   display: flex;
@@ -919,6 +845,7 @@ button:active {
   margin-bottom: 5px;
 }
 
+/* Motivational message */
 .daily-motivation {
   font-style: italic;
   text-align: center;
@@ -927,6 +854,7 @@ button:active {
   font-size: 15px;
 }
 
+/* Refresh workout button */
 .daily-refresh-btn {
   background: rgba(255, 255, 255, 0.2);
   border: none;
@@ -945,8 +873,205 @@ button:active {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* ======================
+       Scroll-to-Top Button
+       ====================== */
+.scroll-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Circular button */
+  background-color: var(--primary-purple);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  background-color: var(--dark-purple);
+  transform: translateY(-3px);
+}
+
+.scroll-to-top:active {
+  transform: translateY(0);
+}
+
+/* ======================
+       Navigation Bar
+       ====================== */
+.navbar {
+  background-color: rgba(106, 13, 173, 0.85);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Brand logo area */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background-color: var(--primary-purple);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+/* Navigation links */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #ddd;
+}
+
+/* Animated underline effect */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ddd;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Logout button styling */
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+.logout-btn:hover {
+  color: #ddd;
+}
+
+/* Desktop-specific logout styles */
+.desktop-nav .logout-btn {
+  position: relative;
+}
+
+.desktop-nav .logout-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ddd;
+  transition: width 0.3s ease;
+}
+
+.desktop-nav .logout-btn:hover::after {
+  width: 100%;
+}
+
+/* Mobile menu button (hidden by default) */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Desktop nav visible only on large screens */
+.desktop-nav {
+  display: flex;
+}
+
+/* Mobile nav hidden initially */
+.mobile-nav {
+  display: none;
+}
+
+/* ======================
+       Responsive Breakpoints
+       ====================== */
+
 /* Tablets (769px - 1024px) */
 @media (max-width: 1024px) {
+  .exercise-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2-column layout */
+  }
+
+  .planner-columns {
+    grid-template-columns: 1fr; /* Stack planner columns */
+  }
+
+  /* Daily workout adjustments */
   .daily-title {
     font-size: 22px;
   }
@@ -969,6 +1094,89 @@ button:active {
 
 /* Mobile (max-width: 768px) */
 @media (max-width: 768px) {
+  /* Single column layout for exercises */
+  .exercise-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .gif-container {
+    height: 200px;
+  }
+
+  /* Adjust watermark for mobile */
+  .watermark-cover {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  /* Stack planner controls */
+  .planner-controls {
+    flex-direction: column;
+  }
+
+  .plan-name-input {
+    min-width: 100%;
+  }
+
+  /* Mobile nav styles */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  /* Slide-in mobile menu */
+  .mobile-nav {
+    display: flex;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: rgba(106, 13, 173, 0.95);
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    transform: translateY(-150%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+  }
+
+  .mobile-nav.open {
+    transform: translateY(0);
+    padding: 1rem 0;
+  }
+
+  /* Full-width nav items */
+  .mobile-nav .logout-btn {
+    width: 100%;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .mobile-nav .logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-nav .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .mobile-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-nav .nav-link::after {
+    display: none;
+  }
+
+  /* Daily workout mobile styles */
   .daily-title {
     font-size: 20px;
   }
@@ -993,27 +1201,12 @@ button:active {
     height: 40%;
   }
 
+  .daily-exercise-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .daily-exercise-details {
     width: 100%;
   }
-}
-.scroll-to-top {
-  display: none; /* Hidden by default */
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 99;
-  font-size: 18px;
-  background-color: #333;
-  color: white;
-  border: none;
-  outline: none;
-  padding: 10px 15px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.scroll-to-top:hover {
-  background-color: #555;
 }

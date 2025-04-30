@@ -1,105 +1,204 @@
 <!DOCTYPE html>
+<!-- 
+  FITNESS DASHBOARD HTML DOCUMENT
+  Description: Main dashboard page for fitness tracking application
+-->
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fitness Dashboard</title>
+  <!-- META TAGS FOR CHARACTER SET AND RESPONSIVE VIEWPORT -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <!-- PAGE TITLE AND STYLESHEET LINKS -->
+  <title>Fitness Dashboard</title>
+  <!-- Main stylesheet for dashboard styling -->
   <link rel="stylesheet" href="Dashboard.css">
+  <!-- Font Awesome for icon library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-  
-  <div id="navbar-container"></div>
-  <!-- MAIN DASHBOARD CONTENT -->
-  <div class="container">
-    <div class="main">
-      <div class="header">
-        <h1><strong>Welcome back, <span id="username-display">@User</span>!</strong></h1>
-      </div>
 
+<body>
+
+      <!-- Header section containing the entire navigation bar -->
+      <header class="navbar-wrapper">
+        <!-- Semantic <nav> element represents the main navigation -->
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+          <!-- Navigation container -->
+          <section class="navbar-container">
+            <!-- Brand logo and text linking to homepage -->
+            <a href="#" class="navbar-brand">
+              <!-- Logo icon -->
+              <span class="logo-icon">FQ</span>
+              <!-- Logo text -->
+              <span class="logo-text">FitQuest</span>
+            </a>
+  
+            <!-- Button for toggling mobile menu -->
+            <button
+              class="mobile-menu-btn"
+              id="mobileMenuBtn"
+              aria-label="Toggle mobile menu"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+            <!-- Desktop Navigation -->
+            <div class="nav-links desktop-nav" id="desktopNavLinks">
+              <a href="../Dashboard/Dashboard.html" class="nav-link"
+                ><i class="fas fa-chart-line"></i> Dashboard</a
+              >
+              <a href="../Workout/workout.html" class="nav-link active"
+                ><i class="fas fa-dumbbell"></i> Workout</a
+              >
+              <a href="../Workout/workout.html#daily-workout" class="nav-link">
+                <i class="fas fa-running"></i> Daily Workout
+              </a>
+              <a href="../MealPlanner/mealplanner.html" class="nav-link">
+                <i class="fas fa-calendar-alt"></i> Meal Planner
+              </a>
+              <a href="../Contact/contact.html" class="nav-link active">
+                <i class="fas fa-comment-dots"></i> Feedback
+              </a>
+              <button id="logout-btn" class="nav-link logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+              </button>
+              
+                
+            
+            </div>
+  
+            <!-- Mobile Navigation (different links) -->
+            <div class="nav-links mobile-nav" id="mobileNavLinks">
+              <a href="../Dashboard/Dashboard.html" class="nav-link"
+                ><i class="fas fa-home"></i> Dashboard</a
+              >
+              <a href="../Workout/workout.html" class="nav-link"
+                ><i class="fas fa-dumbbell"></i> Workout</a
+              >
+              <a href="../Workout/workout.html#daily-workout" class="nav-link">
+                <i class="fas fa-running" aria-hidden="true"></i> Daily Workout
+              </a>
+  
+              <a href="../MealPlanner/mealplanner.html" class="nav-link"
+                ><i class="fas fa-cog"></i> Meal Planner</a
+              >
+              <a href="../Contact/contact.html" class="nav-link active">
+                  <i class="fas fa-comment-dots"></i> Feedback
+              </a>
+              <button id="mobile-logout-btn" class="nav-link logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
+  <!-- NAVIGATION BAR CONTAINER (Dynamically loaded via JavaScript) -->
+  <div id="navbar-container"></div>
+  
+  <!-- MAIN CONTENT CONTAINER -->
+  <div class="container">
+    <!-- PRIMARY CONTENT SECTION -->
+    <main class="main">
+      <!-- WELCOME HEADER SECTION -->
+      <header class="header">
+        <h1><strong>Welcome back, <span id="username-display">@User</span>!</strong></h1>
+      </header>
+      <!-- QUICK ACCESS CARDS SECTION -->
       <div class="cards">
-        <div class="card" style="background-color: #9CAF88">
-          <a  href="../Workout/workout.html">
-            <img src="icons8-workout.gif" alt="Workouts" class="dashboard-image" />
+        <!-- WORKOUT CARD - Links to workout page -->
+        <div class="card" style="background-color: #7f7f7f">
+          <a href="../Workout/workout.html">
+            <img src="workout.png" alt="Workouts" class="dashboard-image">
           </a>
-          
           <p>Workouts</p>
         </div>
-        <div class="card" style="background-color: #705D5C">
+        
+        <!-- CALORIES CARD - Displays calories popup -->
+        <div class="card" style="background-color: #7f7f7f">
           <img id="caloriesImage" src="calories.png" alt="Calories Burnt">
-          <!-- Popup to show calories -->
+          <!-- Hidden popup that appears when calories image is clicked -->
           <div id="caloriesPopup">
             <p id="caloriesText"></p>
           </div>
-
           <p>Calories Burnt</p>
         </div>
       </div>
 
-      <div class="progress-tracker">
-        <h2>Daily Fitness Tracker</h2>
-        
-        <!-- Goal Setting Form -->
-        <div class="goal-form">
+      <!-- DAILY GOALS SETTING SECTION -->
+      <section class="daily-goals">
+        <h2>Daily Fitness Goals</h2>
+        <!-- Goal setting form with two input fields -->
+        <form class="goal-form">
+          <!-- Workout goal input group -->
           <div class="form-group">
-            <label for="workoutGoal">
-              <i class="fas fa-dumbbell"></i> Workouts:
-            </label>
-            <input type="number" id="workoutGoal" placeholder="e.g. 3" min="1" max="10">
+            <label for="workoutGoal"><i class="fas fa-dumbbell"></i> Workouts:</label>
+            <input type="number" id="workoutGoal" 
+                   placeholder="Enter number of workouts" 
+                   min="1" max="10">
           </div>
+          
+          <!-- Calorie goal input group -->
           <div class="form-group">
-            <label for="calorieGoal">
-              <i class="fas fa-fire"></i> Calories to Burn:
-            </label>
-            <input type="number" id="calorieGoal" placeholder="e.g. 500" min="100" max="5000">
+            <label for="calorieGoal"><i class="fas fa-fire"></i> Calories to Burn:</label>
+            <input type="number" id="calorieGoal" 
+                   placeholder="Enter number of calories" 
+                   min="100" max="5000">
           </div>
-          <button id="setGoalsBtn">Start Tracking</button>
-        </div>
+          
+          <!-- Button to initiate tracking (type="button" prevents form submission) -->
+          <button id="setGoalsBtn" type="button">Start Tracking</button>
+        </form>
+      </section>
       
-        <!-- Progress Display (hidden initially) -->
-        <div class="progress-display" style="display:none;">
-          <h3>Today's Progress</h3>
-          
-          <!-- Workouts Progress -->
-          <div class="progress-item">
-            <div class="progress-header">
-              <span><i class="fas fa-dumbbell"></i> Workouts</span>
-              <span id="workoutsCount">0/<span id="workoutsGoal">0</span></span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill workout-fill" id="workoutProgress"></div>
-            </div>
+      <!-- PROGRESS TRACKING SECTION (Initially hidden) -->
+      <section class="progress-tracker" style="display:none;">
+        <h2>Today's Progress</h2>
+        
+        <!-- WORKOUT PROGRESS ITEM -->
+        <div class="progress-item">
+          <div class="progress-header">
+            <span><i class="fas fa-dumbbell"></i> Workouts</span>
+            <!-- Displays current/target workouts (e.g., "3/5") -->
+            <span id="workoutsCount">0/<span id="workoutsGoal">0</span></span>
           </div>
-          
-          <!-- Calories Progress -->
-          <div class="progress-item">
-            <div class="progress-header">
-              <span><i class="fas fa-fire"></i> Calories Burned</span>
-              <span id="caloriesCount">0/<span id="caloriesGoal">0</span></span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill calorie-fill" id="calorieProgress"></div>
-            </div>
+          <!-- Visual progress bar -->
+          <div class="progress-bar">
+            <div class="progress-fill workout-fill" id="workoutProgress"></div>
           </div>
-          
-          <!-- Progress Input -->
-          <div class="progress-input">
-            <div class="input-group">
-              <button id="addWorkoutBtn">+1 Workout</button>
-              <input type="number" id="addCalories" placeholder="Add calories burned">
-              <button id="addCaloriesBtn">Add Calories</button>
-            </div>
-          </div>
-          
-          <!-- Result Message -->
-          <div class="result-message" id="resultMessage"></div>
+          <!-- Button to log additional workouts -->
+          <button id="addWorkoutBtn" class="progress-action-btn">
+            <i class="fas fa-plus"></i> Add Workout
+          </button>
         </div>
-      </div>
-    </div> 
+        
+        <!-- CALORIE PROGRESS ITEM -->
+        <div class="progress-item">
+          <div class="progress-header">
+            <span><i class="fas fa-fire"></i> Calories Burned</span>
+            <!-- Displays current/target calories (e.g., "1200/1500") -->
+            <span id="caloriesCount">0/<span id="caloriesGoal">0</span></span>
+          </div>
+          <!-- Visual progress bar -->
+          <div class="progress-bar">
+            <div class="progress-fill calorie-fill" id="calorieProgress"></div>
+          </div>
+          <!-- Input group for adding calories -->
+          <div class="calorie-input-group">
+            <input type="number" id="addCalories" 
+                   placeholder="Enter calories burned" 
+                   min="0">
+            <button id="addCaloriesBtn" class="progress-action-btn">
+              <i class="fas fa-plus"></i> Add
+            </button>
+          </div>
+        </div>
+        
+        <!-- RESULT MESSAGE DISPLAY (Shows completion status) -->
+        <div class="result-message" id="resultMessage"></div>
+      </section>
+    </main> 
   </div>
-</div> 
 
-<script src="Dashboard.js"></script>
+  <!-- JAVASCRIPT FOR DASHBOARD FUNCTIONALITY -->
+  <script src="Dashboard.js"></script>
 </body>
 </html>
