@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- 
+      Basic document metadata
+      - Character encoding for proper text rendering
+      - Viewport settings for responsive design
+      - Descriptive title for SEO and accessibility
+    -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FitQuest Workout</title>
+    <title>FitQuest Workout - Your Fitness Companion</title>
 
-    <!-- Styling for html page. Linking the main CSS which is workout.css -->
+    <!-- 
+      External resources
+      - Main stylesheet for the workout page
+      - Google Fonts for typography
+      - Font Awesome for icons
+    -->
     <link rel="stylesheet" href="workout.css" />
-
-    <!-- Fonts  to make it  fancy  and nice-->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Icons, because text alone just looks minimal  -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -22,31 +29,147 @@
   </head>
 
   <body>
-    <!-- Inject navbar later...  it's being handled via JS. particulalarly workout.js -->
-    <nav id="navbar-container"></nav>
+    <!-- 
+      Main header section containing the navigation
+      - Uses <header> semantic tag instead of generic div
+      - Proper ARIA attributes for accessibility
+    -->
+    <header class="navbar-wrapper">
+      <!-- 
+        Primary navigation element
+        - Uses <nav> semantic tag
+        - Clearly labeled for screen readers
+      -->
+      <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <!-- 
+          Navigation container section
+          - Uses <section> instead of div for better semantics
+          - Contains brand logo and navigation elements
+        -->
+        <section class="navbar-container">
+          <!-- 
+            Brand logo link
+            - Uses <a> tag for proper linking
+            - Contains both icon and text elements
+          -->
+          <a href="#" class="navbar-brand">
+            <span class="logo-icon">FQ</span>
+            <span class="logo-text">FitQuest</span>
+          </a>
 
+          <!-- 
+            Mobile menu toggle button
+            - Properly labeled for accessibility
+            - Uses icon from Font Awesome
+          -->
+          <button
+            class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            aria-label="Toggle mobile menu"
+            aria-expanded="false"
+          >
+            <i class="fas fa-bars" aria-hidden="true"></i>
+          </button>
+
+          <!-- 
+            Desktop navigation section
+            - Uses <section> instead of div
+            - Contains primary navigation links
+          -->
+          <section class="nav-links desktop-nav" id="desktopNavLinks">
+            <a href="../Dashboard/Dashboard.html" class="nav-link">
+              <i class="fas fa-chart-line" aria-hidden="true"></i> Dashboard
+            </a>
+            <a href="../Workout/workout.html" class="nav-link active">
+              <i class="fas fa-dumbbell" aria-hidden="true"></i> Workout
+            </a>
+            <a href="../Workout/workout.html#daily-workout" class="nav-link">
+              <i class="fas fa-running" aria-hidden="true"></i> Daily Workout
+            </a>
+            <a href="../MealPlanner/mealplanner.html" class="nav-link">
+              <i class="fas fa-calendar-alt" aria-hidden="true"></i> Meal
+              Planner
+            </a>
+            <a href="../Contact/contact.html" class="nav-link">
+              <i class="fas fa-comment-dots" aria-hidden="true"></i> Feedback
+            </a>
+            <button id="logout-btn" class="nav-link logout-btn">
+              <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Log Out
+            </button>
+          </section>
+
+          <!-- 
+            Mobile navigation section
+            - Separate section for mobile-specific navigation
+            - Uses <section> instead of div
+          -->
+          <section class="nav-links mobile-nav" id="mobileNavLinks">
+            <a href="../Dashboard/Dashboard.html" class="nav-link">
+              <i class="fas fa-home" aria-hidden="true"></i> Dashboard
+            </a>
+            <a href="../Workout/workout.html" class="nav-link">
+              <i class="fas fa-dumbbell" aria-hidden="true"></i> Workout
+            </a>
+            <a href="../Workout/workout.html#daily-workout" class="nav-link">
+              <i class="fas fa-running" aria-hidden="true"></i> Daily Workout
+            </a>
+            <a href="../MealPlanner/mealplanner.html" class="nav-link">
+              <i class="fas fa-utensils" aria-hidden="true"></i> Meal Planner
+            </a>
+            <a href="../Contact/contact.html" class="nav-link">
+              <i class="fas fa-comment-dots" aria-hidden="true"></i> Feedback
+            </a>
+            <button id="mobile-logout-btn" class="nav-link logout-btn">
+              <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Log Out
+            </button>
+          </section>
+        </section>
+      </nav>
+    </header>
+
+    <!-- 
+      Main content area
+      - Uses <main> semantic tag for primary content
+      - Contains search functionality and exercise listing
+    -->
     <main class="container">
-      <!-- Workout Search + Categories Section -->
-      <section class="search-section">
+      <!-- 
+        Search and category section
+        - Uses <section> with proper heading structure
+        - Contains search input and category navigation
+      -->
+      <section class="search-section" aria-labelledby="searchHeading">
+        <h2 id="searchHeading" class="visually-hidden">Exercise Search</h2>
+
+        <!-- 
+          Search header section
+          - Contains input and clear button
+          - Uses <header> for the search controls
+        -->
         <header class="search-header">
           <input
             type="text"
             id="searchInput"
             placeholder="Search exercises..."
+            aria-label="Search exercises"
             oninput="handleSearchInput()"
           />
-          <!-- Only shows up when user types... because UX matters for user experience-->
           <button
             class="clear-search"
             onclick="clearSearch()"
             style="display: none"
+            aria-label="Clear search"
           >
             ×
           </button>
         </header>
 
-        <nav class="category-nav">
-          <!--  muscles will need to be categorized i am aiming for user friendlyness-->
+        <!-- 
+          Category navigation
+          - Uses <nav> for navigation elements
+          - Properly labeled for accessibility
+        -->
+        <nav class="category-nav" aria-label="Exercise categories">
           <button onclick="fetchExercises('back')">Back</button>
           <button onclick="fetchExercises('cardio')">Cardio</button>
           <button onclick="fetchExercises('chest')">Chest</button>
@@ -61,59 +184,95 @@
         </nav>
       </section>
 
-      <!-- Exercise list will appear here -->
-      <section id="exerciseContainer" class="exercise-list">
-        <!-- Gets filled by JS later. if everything works -->
+      <!-- 
+        Exercise listing section
+        - Dynamically populated by JavaScript
+        - Properly labeled for accessibility
+      -->
+      <section id="exerciseContainer" class="exercise-list" aria-live="polite">
+        <!-- Content will be dynamically inserted here by JavaScript -->
       </section>
 
-      <!-- Modal pop-up thingy for more deets on clicked exercise -->
-      <aside
+      <!-- 
+        Exercise details modal
+        - Uses <dialog> semantic element (polyfilled if needed)
+        - Proper ARIA attributes for accessibility
+      -->
+      <dialog
         id="exerciseDetailsModal"
         class="modal"
-        role="dialog"
-        aria-modal="true"
+        aria-labelledby="modalExerciseName"
       >
-        <div class="modal-content">
-          <button class="close-modal" onclick="closeModal()" aria-label="Close">
+        <article class="modal-content">
+          <button
+            class="close-modal"
+            onclick="closeModal()"
+            aria-label="Close modal"
+          >
             &times;
           </button>
           <h3 id="modalExerciseName">Exercise Name</h3>
-          <div class="modal-exercise-details">
+          <section class="modal-exercise-details">
+            <!-- Exercise details will be inserted here -->
             <button onclick="closeModal()" class="add-to-plan-btn">
               Close
             </button>
-          </div>
-        </div>
-      </aside>
+          </section>
+        </article>
+      </dialog>
     </main>
 
-    <!-- This is like a mini motivational dashboard for daily workout -->
-    <section class="daily-workout-container" id="daily-workout">
+    <!-- 
+      Daily workout section
+      - Uses <section> with proper heading structure
+      - Contains motivational content and featured exercise
+    -->
+    <section
+      class="daily-workout-container"
+      id="daily-workout"
+      aria-labelledby="dailyWorkoutHeading"
+    >
       <header class="daily-header">
-        <h2 class="daily-title">
-          <i class="fas fa-calendar-star"></i>
+        <h2 id="dailyWorkoutHeading" class="daily-title">
+          <i class="fas fa-calendar-star" aria-hidden="true"></i>
           Exercise of the Day
         </h2>
-        <p class="daily-date" id="daily-date"></p>
+        <time class="daily-date" id="daily-date"></time>
       </header>
 
-      <article id="workout-planner" class="daily-content">
-        <section id="daily-exercise-container">
+      <article class="daily-content">
+        <section id="daily-exercise-container" aria-live="polite">
           <p class="loading-daily">Loading today's featured exercise...</p>
         </section>
 
-        <blockquote class="daily-motivation">
+        <blockquote
+          class="daily-motivation"
+          cite="https://www.goodreads.com/quotes/tag/workout"
+        >
           "The only bad workout is the one that didn't happen."
         </blockquote>
       </article>
     </section>
 
-    <!-- will scroll and then — back to the top aiming for user friendly feature, -->
-    <button id="scrollToTopBtn" class="scroll-to-top" title="Go to top">
-      <i class="fas fa-arrow-up"></i>
+    <!-- 
+      Scroll to top button
+      - Fixed position for accessibility
+      - Properly labeled for screen readers
+    -->
+    <button
+      id="scrollToTopBtn"
+      class="scroll-to-top"
+      title="Go to top"
+      aria-label="Scroll to top"
+    >
+      <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
 
-    <!-- Directs to javascript workout,js -->
+    <!-- 
+      JavaScript file inclusion
+      - Placed at bottom for performance
+      - Contains all interactive functionality
+    -->
     <script src="workout.js"></script>
   </body>
 </html>

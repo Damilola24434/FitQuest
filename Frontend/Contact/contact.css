@@ -1,3 +1,179 @@
+/* Define custom CSS variables for consistent color, spacing, and shadow use */
+:root {
+  --primary-purple: #5a4fcf;
+  --dark-purple: #3a3288;
+  --light-purple: #9188f0;
+  --bg-white: #ffffff;
+  --gray-text: #555;
+  --surface: #ffffff;
+  --text-primary: #2d3436;
+  --text-secondary: #636e72;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --radius-md: 12px;
+}
+
+/* Base body styling */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  font-family: "Inter", sans-serif;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+/* Main container with top margin */
+.container {
+  margin-top: 80px;
+}
+
+/* Heading style */
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: rgba(106, 13, 173, 0.85);
+  margin-bottom: 20px;
+}
+
+/* Paragraph subtitle */
+p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: var(--text-secondary);
+}
+
+/* Unified form styling for both login and contact forms */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--surface);
+  padding: 30px;
+  border-radius: var(--radius-md);
+  border: 1px solid #ddd;
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Form labels styling */
+form label {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+/* Input field styling - works for both regular inputs and textareas */
+form input,
+form textarea,
+form select {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+}
+
+/* Textarea specific styling */
+form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Highlight form elements on focus */
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: var(--primary-purple);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(90, 79, 207, 0.2);
+}
+
+/* Submit button styling */
+button[type="submit"] {
+  margin-top: 25px;
+  width: 100%;
+  max-width: 300px;
+  padding: 12px;
+  border: none;
+  background-color: rgba(106, 13, 173, 0.85);
+  color: white;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Submit button hover effect */
+button[type="submit"]:hover {
+  background-color: var(--primary-purple);
+}
+
+/* Link styles */
+a {
+  color: rgba(106, 13, 173, 0.85);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Password container with eye icon */
+.password-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Eye icon button styling */
+#toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 1.2em;
+  color: var(--gray-text);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 500px) {
+  .container {
+    margin-top: 40px;
+  }
+
+  form {
+    padding: 20px;
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  form input,
+  form textarea,
+  form select,
+  .password-container,
+  button[type="submit"] {
+    max-width: 100%;
+  }
+}
 :root {
   --primary-purple: #5a4fcf;
   --dark-purple: #3a3288;
@@ -19,7 +195,6 @@
 body {
   scroll-padding-top: 70px;
 }
-
 
 /* Navbar */
 .navbar {
@@ -205,11 +380,10 @@ body {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
-  
+
   .mobile-nav .logout-btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
-  
 
   .mobile-nav .nav-link {
     width: 100%;

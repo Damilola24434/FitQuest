@@ -1,25 +1,11 @@
-// Load navbar - this needs to be done first thing so the user sees navigation immediately
-fetch("../Navbar/navbar.html")
-  .then((response) => {
-    if (!response.ok) throw new Error("Network response was not ok");
-    return response.text();
-  })
-  .then((html) => {
-    // Insert navbar HTML before loading its JS
-    document.getElementById("navbar-container").innerHTML = html;
+/**
+ * FITQUEST WORKOUT MODULE
+ * Main JavaScript controller for workout functionality
+ * Handles exercise fetching, display, search, and daily workout features
+ */
 
-    // Load navbar scripts after DOM is ready
-    const script = document.createElement("script");
-    script.src = "../Navbar/navbar.js";
-    script.onerror = () => console.warn("Failed to load navbar script");
-    document.body.appendChild(script);
-  })
-  .catch((err) => {
-    console.error("Failed to load navbar:", err);
-    // Show fallback navigation if needed
-  });
-
-// Muscle groups we want to include - based on API categories
+/* ================ GLOBAL CONSTANTS ================ */
+// Supported muscle groups/categories from API
 const allCategories = [
   "back",
   "cardio",
@@ -33,25 +19,34 @@ const allCategories = [
   "waist",
 ];
 
-// Exercises to exclude - some have weird names or duplicates
+// Exercises to exclude from display (weird names or duplicates)
 const excludedExercises = [
-  "barbell pullover to press", // This one seems to be a combo move
+  "barbell pullover to press", // Combination movement not properly categorized
 ];
 
-// Cache settings - 24 hours seems reasonable for exercise data
-const CACHE_EXPIRY = 24 * 60 * 60 * 1000;
-let allExercisesCache = {};
-let currentCategory = "back"; // Default starting category
-let searchTimeout = null;
-let lastClickedCard = null;
+// Cache settings (24 hour expiration)
+const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-// Cache helper functions - localStorage is faster than API calls
+/* ================ GLOBAL VARIABLES ================ */
+let allExercisesCache = {}; // Stores all exercises by category
+let currentCategory = "back"; // Default starting category
+let searchTimeout = null; // For search debouncing
+let lastClickedCard = null; // Tracks last clicked exercise card
+
+/* ================ CACHE MANAGEMENT ================ */
+/**
+ * Retrieves cached data from localStorage
+ * @param {string} key - Cache key to retrieve
+ * @returns {object|null} Cached data or null if expired/missing
+ */
 function getCachedData(key) {
   try {
     const cached = localStorage.getItem(key);
     if (!cached) return null;
 
     const { data, timestamp } = JSON.parse(cached);
+
+    // Check if cache is expired
     if (Date.now() - timestamp > CACHE_EXPIRY) {
       localStorage.removeItem(key); // Clean up expired cache
       return null;
@@ -64,6 +59,11 @@ function getCachedData(key) {
   }
 }
 
+/**
+ * Stores data in cache with timestamp
+ * @param {string} key - Cache key to store under
+ * @param {object} data - Data to cache
+ */
 function setCachedData(key, data) {
   try {
     const cacheEntry = {
@@ -76,14 +76,19 @@ function setCachedData(key, data) {
   }
 }
 
-// Daily workout functions - gives users something fresh each day
+/* ================ DAILY WORKOUT FEATURE ================ */
+/**
+ * Generates consistent daily seed based on current date
+ * Also formats and displays the current date
+ * @returns {number} Hash value for daily exercise selection
+ */
 function getDailySeed() {
   const today = new Date();
   const dateString = `${today.getFullYear()}-${
     today.getMonth() + 1
   }-${today.getDate()}`;
 
-  // Format date nicely for display
+  // Format and display date
   document.getElementById("daily-date").textContent = today.toLocaleDateString(
     "en-US",
     {
@@ -94,7 +99,7 @@ function getDailySeed() {
     }
   );
 
-  // Simple hash for consistent daily exercise
+  // Simple hash algorithm for consistent daily selection
   let hash = 0;
   for (let i = 0; i < dateString.length; i++) {
     const char = dateString.charCodeAt(i);
@@ -104,12 +109,16 @@ function getDailySeed() {
   return hash;
 }
 
+/**
+ * Loads and displays the daily featured exercise
+ * Uses cache when available for better performance
+ */
 async function loadDailyExercise() {
   const container = document.getElementById("daily-exercise-container");
   const seed = getDailySeed();
 
   try {
-    // Check cache first - no need to hit API if we have fresh data
+    // Check cache first before API calls
     const cached = getCachedData("allExercises");
     if (cached) {
       allExercisesCache = cached;
@@ -117,37 +126,44 @@ async function loadDailyExercise() {
       return;
     }
 
-    // If no cache, fetch all exercises quietly
+    // Fetch all exercises if cache is empty
     if (Object.keys(allExercisesCache).length === 0) {
-      await fetchAllExercises(true); // Silent mode for background fetch
+      await fetchAllExercises(true); // Silent background fetch
     }
 
     selectAndDisplayDailyExercise();
   } catch (error) {
-    // Show friendly error message
+    // User-friendly error display
     container.innerHTML = `
-            <article class="error-daily">
-                <p>Failed to load today's exercise. The server might be busy.</p>
-                <p>Try refreshing the page or check back later.</p>
-                <small>Technical details: ${error.message}</small>
-            </article>
-        `;
+      <article class="error-daily">
+        <p>Failed to load today's exercise. The server might be busy.</p>
+        <p>Try refreshing the page or check back later.</p>
+        <small>Technical details: ${error.message}</small>
+      </article>
+    `;
     console.error("Daily exercise error:", error);
   }
 
+  /**
+   * Selects and displays the daily exercise from cached data
+   */
   function selectAndDisplayDailyExercise() {
     const allExercises = Object.values(allExercisesCache).flat();
     if (allExercises.length === 0) {
       throw new Error("No exercises in database");
     }
 
-    // Pick consistent exercise for today
+    // Deterministic selection based on daily seed
     const dailyIndex = Math.abs(seed) % allExercises.length;
     const dailyExercise = allExercises[dailyIndex];
     displayDailyExercise(dailyExercise);
   }
 }
 
+/**
+ * Displays the daily exercise in the UI
+ * @param {object} exercise - Exercise object to display
+ */
 function displayDailyExercise(exercise) {
   const container = document.getElementById("daily-exercise-container");
 
@@ -157,55 +173,53 @@ function displayDailyExercise(exercise) {
       ? exercise.instructions.map((step) => `<li>${step}</li>`).join("")
       : "<li>No instructions available</li>";
 
-  // Build exercise card with semantic HTML
+  // Build exercise card HTML
   container.innerHTML = `
-        <article class="daily-exercise">
-            <header class="daily-exercise-header">
-                <h3 class="daily-exercise-name">${exercise.name}</h3>
-                <span class="daily-exercise-category">${
-                  exercise.bodyPart || exercise.target
-                }</span>
-            </header>
-            <section class="daily-exercise-content">
-                <figure>
-                    <img src="${exercise.gifUrl}" alt="${
+    <article class="daily-exercise">
+      <header class="daily-exercise-header">
+        <h3 class="daily-exercise-name">${exercise.name}</h3>
+        <span class="daily-exercise-category">${
+          exercise.bodyPart || exercise.target
+        }</span>
+      </header>
+      <section class="daily-exercise-content">
+        <figure>
+          <img src="${exercise.gifUrl}" alt="${
     exercise.name
   }" class="daily-exercise-gif" loading="lazy">
-                </figure>
-                <div class="daily-exercise-details">
-                    <dl class="daily-exercise-info">
-                        <dt><i class="fas fa-dumbbell"></i> Equipment:</dt>
-                        <dd>${exercise.equipment || "None"}</dd>
-                        
-                        <dt><i class="fas fa-bullseye"></i> Target:</dt>
-                        <dd>${exercise.target}</dd>
-                        
-                        ${
-                          exercise.secondaryMuscles?.length > 0
-                            ? `<dt><i class="fas fa-muscle"></i> Secondary Muscles:</dt>
-                               <dd>${exercise.secondaryMuscles.join(", ")}</dd>`
-                            : ""
-                        }
-                    </dl>
-                    <section class="daily-exercise-instructions">
-                        <h4><i class="fas fa-list-ol"></i> Instructions:</h4>
-                        <ol>${formattedInstructions}</ol>
-                    </section>
-                </div>
-            </section>
-        </article>
-    `;
+        </figure>
+        <div class="daily-exercise-details">
+          <dl class="daily-exercise-info">
+            <dt><i class="fas fa-dumbbell"></i> Equipment:</dt>
+            <dd>${exercise.equipment || "None"}</dd>
+            
+            <dt><i class="fas fa-bullseye"></i> Target:</dt>
+            <dd>${exercise.target}</dd>
+           
+          </dl>
+          <section class="daily-exercise-instructions">
+            <h4><i class="fas fa-list-ol"></i> Instructions:</h4>
+            <ol>${formattedInstructions}</ol>
+          </section>
+        </div>
+      </section>
+    </article>
+  `;
 }
 
-// Search functionality - debounced to avoid too many requests
+/* ================ SEARCH FUNCTIONALITY ================ */
+/**
+ * Handles search input with debouncing
+ * Triggers search after 500ms of inactivity
+ */
 function handleSearchInput() {
   const searchInput = document.getElementById("searchInput");
   const clearBtn = document.querySelector(".clear-search");
 
-  // Show/hide clear button
+  // Toggle clear button visibility
   clearBtn.style.display = searchInput.value ? "block" : "none";
 
-  // Debounce search to avoid spamming
+  // Debounce search to avoid excessive requests
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
     if (searchInput.value.length >= 2) {
@@ -213,16 +227,23 @@ function handleSearchInput() {
     } else if (searchInput.value.length === 0) {
       fetchExercises(currentCategory); // Reset to current category
     }
-  }, 500); // Half second delay
+  }, 500);
 }
 
+/**
+ * Clears search input and resets display
+ */
 function clearSearch() {
   const searchInput = document.getElementById("searchInput");
   searchInput.value = "";
   document.querySelector(".clear-search").style.display = "none";
-  fetchExercises(currentCategory); // Reload current category
+  fetchExercises(currentCategory);
 }
 
+/**
+ * Searches exercises across all categories
+ * Uses cached data when available
+ */
 async function searchExercises() {
   const searchTerm = document
     .getElementById("searchInput")
@@ -244,23 +265,26 @@ async function searchExercises() {
       return;
     }
 
-    // If no cache, fetch all exercises
+    // Fetch all exercises if cache is empty
     if (Object.keys(allExercisesCache).length === 0) {
-      await fetchAllExercises(true); // Silent fetch
+      await fetchAllExercises(true);
     }
 
     performSearch();
   } catch (error) {
     container.innerHTML = `
-            <article class="error">
-                <p>Search failed. Try checking your connection.</p>
-                <details>
-                    <summary>Technical details</summary>
-                    ${error.message}
-                </details>
-            </article>`;
+      <article class="error">
+        <p>Search failed. Try checking your connection.</p>
+        <details>
+          <summary>Technical details</summary>
+          ${error.message}
+        </details>
+      </article>`;
   }
 
+  /**
+   * Performs the actual search through cached exercises
+   */
   function performSearch() {
     const searchResults = [];
 
@@ -282,15 +306,21 @@ async function searchExercises() {
       displayExercises(searchResults, "search");
     } else {
       container.innerHTML = `
-                <article class="no-results">
-                    <p>No exercises found for "${searchTerm}"</p>
-                    <p>Try different keywords or browse categories.</p>
-                </article>`;
+        <article class="no-results">
+          <p>No exercises found for "${searchTerm}"</p>
+          <p>Try different keywords or browse categories.</p>
+        </article>`;
     }
   }
 }
 
-// Main exercise fetching function
+/* ================ EXERCISE DATA FETCHING ================ */
+/**
+ * Fetches exercises for a specific body part
+ * @param {string} bodyPart - Muscle group/category to fetch
+ * @param {boolean} silent - If true, suppresses loading UI
+ * @returns {Promise<Array>} Array of exercise objects
+ */
 async function fetchExercises(bodyPart, silent = false) {
   currentCategory = bodyPart;
   const container = document.getElementById("exerciseContainer");
@@ -307,7 +337,7 @@ async function fetchExercises(bodyPart, silent = false) {
   }
 
   try {
-    // API call with error handling
+    // API request with error handling
     const response = await fetch(
       `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=50`,
       {
@@ -326,7 +356,7 @@ async function fetchExercises(bodyPart, silent = false) {
 
     let exercises = await response.json();
 
-    // Filter out unwanted exercises from the API response
+    // Filter out excluded exercises
     exercises = exercises.filter(
       (exercise) =>
         !excludedExercises.some((excluded) =>
@@ -343,25 +373,29 @@ async function fetchExercises(bodyPart, silent = false) {
   } catch (error) {
     if (!silent) {
       container.innerHTML = `
-                <article class="error">
-                    <h3>Oops! Couldn't load ${bodyPart} exercises</h3>
-                    <p>${error.message}</p>
-                    <section class="solutions">
-                        <h4>Try these fixes:</h4>
-                        <ol>
-                            <li>Check your <a href="https://rapidapi.com/developer/dashboard" target="_blank">RapidAPI subscription</a></li>
-                            <li>Refresh the page</li>
-                            <li>Try a different muscle group</li>
-                        </ol>
-                    </section>
-                </article>`;
+        <article class="error">
+          <h3>Oops! Couldn't load ${bodyPart} exercises</h3>
+          <p>${error.message}</p>
+          <section class="solutions">
+            <h4>Try these fixes:</h4>
+            <ol>
+              <li>Check your <a href="https://rapidapi.com/developer/dashboard" target="_blank">RapidAPI subscription</a></li>
+              <li>Refresh the page</li>
+              <li>Try a different muscle group</li>
+            </ol>
+          </section>
+        </article>`;
     }
     console.error(`Error fetching ${bodyPart} exercises:`, error);
     throw error;
   }
 }
 
-// Fetch all exercises at once - used for search and daily exercise
+/**
+ * Fetches all exercises across all categories
+ * @param {boolean} silent - If true, suppresses loading UI
+ * @returns {Promise<object>} Object with exercises by category
+ */
 async function fetchAllExercises(silent = false) {
   const container = document.getElementById("exerciseContainer");
   if (!silent) {
@@ -416,17 +450,22 @@ async function fetchAllExercises(silent = false) {
   } catch (error) {
     if (!silent) {
       container.innerHTML = `
-                <article class="error">
-                    <p>Failed to load all exercises. Try selecting individual categories instead.</p>
-                    <p>Error: ${error.message}</p>
-                </article>`;
+        <article class="error">
+          <p>Failed to load all exercises. Try selecting individual categories instead.</p>
+          <p>Error: ${error.message}</p>
+        </article>`;
     }
     console.error("Error loading all exercises:", error);
     throw error;
   }
 }
 
-// Display exercises in a grid
+/* ================ UI DISPLAY FUNCTIONS ================ */
+/**
+ * Displays exercises in a grid layout
+ * @param {Array} exercises - Array of exercise objects
+ * @param {string} category - Current category or 'search' for search results
+ */
 function displayExercises(exercises, category) {
   const container = document.getElementById("exerciseContainer");
   const searchInput = document.getElementById("searchInput");
@@ -465,52 +504,44 @@ function displayExercises(exercises, category) {
 
     // Build card content
     card.innerHTML = `
-            <figure class="gif-container">
-                <img src="${exercise.gifUrl}" alt="${
-      exercise.name
-    }" loading="lazy">
-                <figcaption class="watermark-cover">${
-                  exercise.name
-                }</figcaption>
-            </figure>
-            <section class="exercise-content">
-                <div class="exercise-details">
-                    <div class="exercise-details-content">
-                        <dl>
-                            <dt>Equipment:</dt>
-                            <dd>${exercise.equipment || "None"}</dd>
-                            
-                            <dt>Target:</dt>
-                            <dd>${exercise.target}</dd>
-                            
-                            ${
-                              exercise.secondaryMuscles?.length > 0
-                                ? `<dt>Secondary Muscles:</dt>
-                                   <dd>${exercise.secondaryMuscles.join(
-                                     ", "
-                                   )}</dd>`
-                                : ""
-                            }
-                            
-                            ${
-                              category === "search"
-                                ? `<dt>Category:</dt>
-                                   <dd>${
-                                     exercise.originalCategory || category
-                                   }</dd>`
-                                : ""
-                            }
-                        </dl>
-                        <section>
-                            <h3>Instructions:</h3>
-                            <ol class="instructions-list">
-                                ${formattedInstructions}
-                            </ol>
-                        </section>
-                    </div>
-                </div>
+      <figure class="gif-container">
+        <img src="${exercise.gifUrl}" alt="${exercise.name}" loading="lazy">
+        <figcaption class="watermark-cover">${exercise.name}</figcaption>
+      </figure>
+      <section class="exercise-content">
+        <div class="exercise-details">
+          <div class="exercise-details-content">
+            <dl>
+              <dt>Equipment:</dt>
+              <dd>${exercise.equipment || "None"}</dd>
+              
+              <dt>Target:</dt>
+              <dd>${exercise.target}</dd>
+              
+              ${
+                exercise.secondaryMuscles?.length > 0
+                  ? `<dt>Secondary Muscles:</dt>
+                     <dd>${exercise.secondaryMuscles.join(", ")}</dd>`
+                  : ""
+              }
+              
+              ${
+                category === "search"
+                  ? `<dt>Category:</dt>
+                     <dd>${exercise.originalCategory || category}</dd>`
+                  : ""
+              }
+            </dl>
+            <section>
+              <h3>Instructions:</h3>
+              <ol class="instructions-list">
+                ${formattedInstructions}
+              </ol>
             </section>
-        `;
+          </div>
+        </div>
+      </section>
+    `;
 
     // Toggle details on click
     const watermarkCover = card.querySelector(".watermark-cover");
@@ -545,7 +576,10 @@ function displayExercises(exercises, category) {
   container.appendChild(grid);
 }
 
-// Initialize everything when page loads
+/* ================ INITIALIZATION ================ */
+/**
+ * Initializes the application when page loads
+ */
 window.onload = function () {
   // Start with back exercises
   fetchExercises("back");
@@ -566,10 +600,11 @@ window.onload = function () {
   }, msUntilMidnight);
 };
 
+/* ================ UI INTERACTIONS ================ */
 // Scroll to top button behavior
 const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
-// Only show button when scrolled down
+// Show/hide scroll button based on scroll position
 window.onscroll = function () {
   if (
     document.body.scrollTop > 200 ||
@@ -588,3 +623,43 @@ scrollToTopBtn.addEventListener("click", function () {
     behavior: "smooth",
   });
 });
+
+// Mobile menu toggle functionality
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileNavLinks = document.getElementById("mobileNavLinks");
+
+mobileMenuBtn.addEventListener("click", () => {
+  mobileNavLinks.classList.toggle("open");
+  mobileMenuBtn.innerHTML = mobileNavLinks.classList.contains("open")
+    ? '<i class="fas fa-times"></i>'
+    : '<i class="fas fa-bars"></i>';
+});
+
+// Close mobile menu when a link is clicked
+document.querySelectorAll(".mobile-nav .nav-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    mobileNavLinks.classList.remove("open");
+    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+  });
+});
+
+// Automatically highlight current page in navbar
+const currentPage = window.location.pathname.split("/").pop();
+
+document.querySelectorAll(".nav-link").forEach((link) => {
+  const linkPage = link.getAttribute("href")?.split("/").pop();
+
+  if (linkPage === currentPage) {
+    link.classList.add("active");
+  } else {
+    link.classList.remove("active");
+  }
+});
+
+// Make scroll function available globally
+window.scrollToWorkoutPlanner = function () {
+  const plannerSection = document.getElementById("workout-planner");
+  if (plannerSection) {
+    plannerSection.scrollIntoView({ behavior: "smooth" });
+  }
+};
