@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/routes/feedback.php", {
+        const res = await fetch("https://fitquest-backend-3pdn.onrender.com/routes/feedback.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Fetch feedbacks from server
   async function getFeedback() {
     try {
-      const res = await fetch("http://127.0.0.1:8000/routes/feedback.php", {
+      const res = await fetch("https://fitquest-backend-3pdn.onrender.com/routes/feedback.php", {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
