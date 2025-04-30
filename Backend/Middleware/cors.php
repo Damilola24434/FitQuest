@@ -3,7 +3,8 @@ function handleCors() {
     $allowedOrigins = [
         "http://127.0.0.1:3000",
         "http://localhost:3000",
-        "https://fitquest-1skw.onrender.com"
+        "https://fitquest-1skw.onrender.com",
+        "https://fitquest-frontend.onrender.com"
     ];
 
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
