@@ -1,12 +1,19 @@
 <?php
-// Load env variables
-$env = parse_ini_file(__DIR__ . '/../.env');
+// Use Render's DATABASE_URL env variable
+$databaseUrl = getenv("DATABASE_URL");
 
-$host = $env['DB_HOST'];
-$port = $env['DB_PORT'];
-$db   = $env['DB_NAME'];
-$user = $env['DB_USER'];
-$pass = $env['DB_PASS'];
+if (!$databaseUrl) {
+    die("🔴 DATABASE_URL not set.");
+}
+
+// Parse the URL
+$dbParts = parse_url($databaseUrl);
+
+$host = $dbParts['host'];
+$port = $dbParts['port'];
+$user = $dbParts['user'];
+$pass = $dbParts['pass'];
+$db   = ltrim($dbParts['path'], '/');
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$db";
 
