@@ -1,102 +1,119 @@
-// First things first - let's load up that navbar from our components
-fetch("../Navbar/navbar.html")
-  .then((response) => response.text())
-  .then((html) => {
-    // Pop the navbar HTML into our container
-    document.getElementById("navbar-container").innerHTML = html;
-
-    // Now that the HTML is loaded, let's grab the navbar JS too
-    const script = document.createElement("script");
-    script.src = "../Navbar/navbar.js";
-    document.body.appendChild(script);
-  });
-
-
 // Track progress
+// Stores the user's daily fitness goals (target values)
 let dailyGoals = {
-  workouts: 0,
-  calories: 0
+  workouts: 0,    // Target number of workouts
+  calories: 0     // Target calories to burn
 };
 
+// Tracks today's progress (actual values)
 let todayProgress = {
-  workouts: 0,
-  calories: 0
+  workouts: 0,    // Completed workouts count
+  calories: 0     // Calories burned so far
 };
 
-// DOM Elements
-const setGoalsBtn = document.getElementById('setGoalsBtn');
-const addWorkoutBtn = document.getElementById('addWorkoutBtn');
-const addCaloriesBtn = document.getElementById('addCaloriesBtn');
-const progressDisplay = document.querySelector('.progress-display');
-const caloriesCard = document.querySelector('.card:nth-child(2)');
-// Set daily goals
-setGoalsBtn.addEventListener('click', function() {
+// DOM Elements - Cache frequently accessed elements
+const setGoalsBtn = document.getElementById('setGoalsBtn');          // "Start Tracking" button
+const addWorkoutBtn = document.getElementById('addWorkoutBtn');      // "Add Workout" button
+const addCaloriesBtn = document.getElementById('addCaloriesBtn');    // "Add Calories" button
+const progressDisplay = document.querySelector('.progress-tracker'); // Progress tracker section
+const caloriesCard = document.querySelector('.card:nth-child(2)');   // Calories card element
+
+// Set daily goals when "Start Tracking" button is clicked
+setGoalsBtn.addEventListener('click', function(e) {
+  e.preventDefault(); // Prevent form submission/page refresh
+  
+  // Get user input values
   const workoutGoal = parseInt(document.getElementById('workoutGoal').value);
   const calorieGoal = parseInt(document.getElementById('calorieGoal').value);
   
+  // Validate inputs
   if (workoutGoal && calorieGoal) {
+    // Store goals
     dailyGoals.workouts = workoutGoal;
     dailyGoals.calories = calorieGoal;
     
-    // Update display
+    // Update displayed goal values
     document.getElementById('workoutsGoal').textContent = workoutGoal;
     document.getElementById('caloriesGoal').textContent = calorieGoal;
     
-    // Show progress section
+    // Show the progress tracking section
     progressDisplay.style.display = 'block';
     
-    // Reset any previous progress
+    // Reset previous progress (if any)
     todayProgress = { workouts: 0, calories: 0 };
-    updateProgress();
+    updateProgress(); // Update the UI
   } else {
+    // Show error if inputs are invalid
     alert('Please enter valid goals for both fields');
   }
 });
 
-// Add workout
+// Add workout when "Add Workout" button is clicked
 addWorkoutBtn.addEventListener('click', function() {
-  todayProgress.workouts++;
-  updateProgress();
-  checkCompletion();
+  todayProgress.workouts++; // Increment workout count
+  updateProgress();         // Update progress bars and counters
+  checkCompletion();        // Check if goals are completed
 });
 
-// Add calories
+// Add calories when "Add Calories" button is clicked
 addCaloriesBtn.addEventListener('click', function() {
-  const calories = parseInt(document.getElementById('addCalories').value);
+  const caloriesInput = document.getElementById('addCalories');
+  const calories = parseInt(caloriesInput.value);
+  
+  // Validate input
   if (calories && calories > 0) {
-    todayProgress.calories += calories;
-    localStorage.setItem('caloriesToday', todayProgress.calories);
-    document.getElementById('addCalories').value = '';
-    updateProgress();
-    checkCompletion();
+    todayProgress.calories += calories; // Add to total calories
+    caloriesInput.value = '';           // Clear input field
+    updateProgress();                   // Update progress bars
+    checkCompletion();                  // Check goal completion
+  } else {
+    // Show error for invalid input
+    alert('Please enter a positive number for calories burned');
+    caloriesInput.focus(); // Return focus to input field
   }
 });
 
+// Updates progress bars and counters
 function updateProgress() {
-  // Workouts
+  // Calculate workout progress percentage (capped at 100%)
   const workoutPercent = Math.min(100, (todayProgress.workouts / dailyGoals.workouts) * 100);
+  
+  // Update workout progress bar width
   document.getElementById('workoutProgress').style.width = `${workoutPercent}%`;
+  
+  // Update workout counter text (shows current/target)
   document.getElementById('workoutsCount').textContent = 
     `${todayProgress.workouts}/${dailyGoals.workouts}` +
+    // Add "+X" if exceeded goal
     (todayProgress.workouts > dailyGoals.workouts ? ` (+${todayProgress.workouts - dailyGoals.workouts})` : '');
 
-  // Calories
+  // Calculate calorie progress percentage (capped at 100%)
   const caloriePercent = Math.min(100, (todayProgress.calories / dailyGoals.calories) * 100);
+  
+  // Update calorie progress bar width
   document.getElementById('calorieProgress').style.width = `${caloriePercent}%`;
+  
+  // Update calorie counter text (shows current/target)
   document.getElementById('caloriesCount').textContent = 
     `${todayProgress.calories}/${dailyGoals.calories}` +
+    // Add "+X" if exceeded goal
     (todayProgress.calories > dailyGoals.calories ? ` (+${todayProgress.calories - dailyGoals.calories})` : '');
 }
 
+// Checks if goals are completed and updates result message
 function checkCompletion() {
   const resultMessage = document.getElementById('resultMessage');
   let message = "";
+  
+  // Calculate how much goals were exceeded (if any)
   const exceededWorkouts = todayProgress.workouts - dailyGoals.workouts;
   const exceededCalories = todayProgress.calories - dailyGoals.calories;
 
+  // Check if both goals are completed
   if (todayProgress.workouts >= dailyGoals.workouts && todayProgress.calories >= dailyGoals.calories) {
     message = "🎉 All goals completed!";
     
+    // Check if goals were exceeded
     if (exceededWorkouts > 0 || exceededCalories > 0) {
       message += " You exceeded your goals by:";
       if (exceededWorkouts > 0) {
@@ -110,41 +127,39 @@ function checkCompletion() {
       message += " Perfect achievement!";
     }
 
+    // Apply success styling
     resultMessage.className = "result-message success";
-
-    // Visual indication of exceeded goals
-    if (exceededWorkouts > 0) {
-      document.querySelector('.workout-fill').style.backgroundColor = '#7cb342'; // Light green
-    }
-    if (exceededCalories > 0) {
-      document.querySelector('.calorie-fill').style.backgroundColor = '#d84315'; // Deep orange
-    }
-
   } else {
-    // Give helpful insight if goals are not yet met
+    // Calculate remaining goals if not completed
     const workoutsLeft = dailyGoals.workouts - todayProgress.workouts;
     const caloriesLeft = dailyGoals.calories - todayProgress.calories;
 
+    // Create appropriate encouragement message
     if (workoutsLeft > 0 && caloriesLeft > 0) {
-      message = `You're doing great! 💪 You need ${workoutsLeft} more workout${workoutsLeft > 1 ? 's' : ''} and ${caloriesLeft} more calories burned to hit today's goals. Keep going! 🔥`;
+      message = `You're doing great! 💪 You need ${workoutsLeft} more workout${workoutsLeft > 1 ? 's' : ''} and ${caloriesLeft} more calories burned to hit today's goals.`;
     } else if (workoutsLeft > 0) {
       message = `You're almost there! Just ${workoutsLeft} more workout${workoutsLeft > 1 ? 's' : ''} to go! 🏋️‍♀️`;
     } else if (caloriesLeft > 0) {
       message = `🔥 Almost there! Burn ${caloriesLeft} more calories to reach your target.`;
     }
 
+    // Apply default styling
     resultMessage.className = "result-message";
-    document.querySelector('.workout-fill').style.backgroundColor = '#9CAF88';
-    document.querySelector('.calorie-fill').style.backgroundColor = '#705D5C';
   }
 
+  // Update the message text
   resultMessage.textContent = message;
 }
 
+// Calories popup functionality - shows when clicking calories image
 document.getElementById('caloriesImage').addEventListener('click', function() {
   const popup = document.getElementById('caloriesPopup');
   const caloriesText = document.getElementById('caloriesText');
+  
+  // Update popup text with current calories
   caloriesText.textContent = `You've burned ${todayProgress.calories} calories today! 🔥`;
+  
+  // Show popup
   popup.style.display = 'block';
 
   // Auto-hide after 3 seconds
