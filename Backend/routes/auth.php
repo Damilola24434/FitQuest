@@ -1,15 +1,18 @@
 <?php
-// Enable all CORS for local development
+// Initialize CORS and session handling
 require_once __DIR__ . '/../Middleware/cors.php'; 
-handleCors();
-configureSession();
+handleCors(); // Apply CORS headers
+configureSession(); // Configure secure session
+
+// Set response headers
 header("Content-Type: application/json");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
+// Database connection
 require_once __DIR__ . '/../config/database.php';
 
-// Get input data safely
+// Get and validate input
 $data = json_decode(file_get_contents("php://input"), true) ?? [];
 $type = $data['type'] ?? null;
 
@@ -19,6 +22,7 @@ if (!$type) {
     exit;
 }
 
+// Handle registration
 if ($type === 'register') {
     // Validate required fields
     if (empty($data['email']) || empty($data['username']) || empty($data['password'])) {
@@ -31,7 +35,7 @@ if ($type === 'register') {
     $username = trim($data['username']);
     $password = password_hash($data['password'], PASSWORD_DEFAULT);
 
-    // Check for duplicates
+    // Check for existing user
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email OR username = :username");
     $stmt->execute(['email' => $email, 'username' => $username]);
     
@@ -41,15 +45,16 @@ if ($type === 'register') {
         exit;
     }
 
-    // Insert new user
+    // Create new user
     $stmt = $pdo->prepare("INSERT INTO users (email, username, password) VALUES (:email, :username, :password)");
     $stmt->execute(['email' => $email, 'username' => $username, 'password' => $password]);
 
     echo json_encode(["message" => "Signed up successfully."]);
     exit;
 
+// Handle login
 } elseif ($type === 'login') {
-    // Validate required fields
+    // Validate credentials
     if (empty($data['identifier']) || empty($data['password'])) {
         http_response_code(400);
         echo json_encode(["message" => "Identifier and password are required"]);
@@ -59,17 +64,19 @@ if ($type === 'register') {
     $identifier = trim($data['identifier']);
     $password = $data['password'];
 
+    // Find user by email or username
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :id OR username = :id");
     $stmt->execute(['id' => $identifier]);
     $user = $stmt->fetch();
 
+    // Verify password
     if (!$user || !password_verify($password, $user['password'])) {
         http_response_code(401);
         echo json_encode(["message" => "Invalid email/username or password."]);
         exit;
     }
 
-    // Set session
+    // Create session
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
 
@@ -79,16 +86,18 @@ if ($type === 'register') {
             "id" => $user['id'],
             "email" => $user['email'],
             "username" => $user['username']
-        ]
+        ] // Return user details (excluding password)
     ]);
     exit;
 
+// Handle logout
 } elseif ($type === 'logout') {
     session_destroy();
     echo json_encode(["message" => "Logged out"]);
     exit;
 }
 
+// Invalid request type
 http_response_code(400);
 echo json_encode(["message" => "Bad request"]);
 ?>
