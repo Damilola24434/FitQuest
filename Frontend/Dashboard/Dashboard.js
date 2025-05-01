@@ -12,7 +12,7 @@ fetch("../Navbar/navbar.html")
   });
 
 // Fetch session to get username
-fetch("https://fitquest-backend-3pdn.onrender.com/check-session.php", {
+fetch("https://fitquest-backend-3pdn.onrender.com/routes/check-session.php", {
   method: "GET",
   credentials: "include",
   headers: {
