@@ -71,19 +71,19 @@ Styling for mealplanner page
 
 /* breakfast color */
 .breakfast {
-  background-color: #a8c8a7; /* Light green */
+  background-color: #f0f7ff; /* Light green */
   color: black;
 }
 
 /* lunch color */
 .lunch {
-  background-color: #5e504d; /* Brown */
+  background-color: #5A4FCF; /* Brown */
   color: white;
 }
 
 /* dinner colors */
 .dinner {
-  background-color: #f8a6b0; /* Light pink */
+  background-color: #9188F0; /* Light pink */
   color: black;
 }
 
