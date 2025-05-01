@@ -1,7 +1,31 @@
 // Mobile menu toggle functionality
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 const mobileNavLinks = document.getElementById("mobileNavLinks");
+// Logout functionality for both desktop and mobile buttons
+const logout = async () => {
+  try {
+    const res = await fetch("https://fitquest-backend-3pdn.onrender.com/routes/auth.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ type: "logout" }),
+    });
 
+    const data = await res.json();
+    alert(data.message || "Logged out");
+    window.location.href = "../Authentication/Login.html"; // redirect to login
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
+
+const logoutBtn = document.getElementById("logout-btn");
+const mobileLogoutBtn = document.getElementById("mobile-logout-btn");
+
+if (logoutBtn) logoutBtn.addEventListener("click", logout);
+if (mobileLogoutBtn) mobileLogoutBtn.addEventListener("click", logout);
 mobileMenuBtn.addEventListener("click", () => {
   mobileNavLinks.classList.toggle("open");
   mobileMenuBtn.innerHTML = mobileNavLinks.classList.contains("open")
