@@ -160,3 +160,10 @@ Styling for mealplanner page
   background: #555;
 }
 
+.meal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
