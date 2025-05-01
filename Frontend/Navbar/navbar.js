@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const data = await res.json();
           alert(data.message || "Logged out successfully");
           // Use relative path from root to ensure it works from any page
-          window.location.href = "/Authentication/Login.html";
+          window.location.href = "../Authentication/LogIn.html";
       } catch (err) {
           console.error("Logout failed:", err);
           alert("Logout failed. Please try again.");
