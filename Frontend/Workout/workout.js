@@ -337,15 +337,13 @@ async function fetchExercises(bodyPart, silent = false) {
   }
 
   try {
-    // API request with error handling
     const response = await fetch(
-      `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=50`,
+      "https://exercise-db-fitness-workout-gym.p.rapidapi.com/list/equipment",
       {
         method: "GET",
         headers: {
-          "X-RapidAPI-Key":
-            "bf0f3e566emsh6d09063f944ef97p1ae6cbjsnfb6426966f16",
-          "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
+          "x-rapidapi-host": "exercise-db-fitness-workout-gym.p.rapidapi.com",
+          "x-rapidapi-key": "bf0f3e566emsh6d09063f944ef97p1ae6cbjsnfb6426966f16",
         },
       }
     );
