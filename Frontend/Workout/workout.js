@@ -344,7 +344,7 @@ async function fetchExercises(bodyPart, silent = false) {
         method: "GET",
         headers: {
           "X-RapidAPI-Key":
-            "66003fab17msh6722a5d2be5592ap14e359jsn71a147f4ba33",
+            "bf0f3e566emsh6d09063f944ef97p1ae6cbjsnfb6426966f16",
           "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
         },
       }
