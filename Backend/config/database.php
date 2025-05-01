@@ -1,28 +1,34 @@
 <?php
-// Use Render's DATABASE_URL env variable
+// Get database URL from environment variables
 $databaseUrl = getenv("DATABASE_URL");
 
+// Exit if no database URL found
 if (!$databaseUrl) {
     die("🔴 DATABASE_URL not set.");
 }
 
-// Parse the URL
+// Parse database connection URL into components
 $dbParts = parse_url($databaseUrl);
 
-$host = $dbParts['host'];
-$port = $dbParts['port'] ?? '5432';;
-$user = $dbParts['user'];
-$pass = $dbParts['pass'];
-$db   = ltrim($dbParts['path'], '/');
+// Extract connection parameters (default port: 5432)
+$host = $dbParts['host'];            // Database server
+$port = $dbParts['port'] ?? '5432';  // Connection port 
+$user = $dbParts['user'];            // Database username
+$pass = $dbParts['pass'];            // Database password
+$db   = ltrim($dbParts['path'], '/'); // Database name
 
+// Create PDO connection string
 $dsn = "pgsql:host=$host;port=$port;dbname=$db";
 
 try {
+    // Create database connection with PDO
     $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,       // Throw exceptions on errors
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,  // Return associative arrays
     ]);
+    
 } catch (PDOException $e) {
+    // Handle connection errors
     die("🔴 Database connection failed: " . $e->getMessage());
 }
 ?>
